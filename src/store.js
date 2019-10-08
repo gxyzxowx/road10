@@ -5,10 +5,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-
+    mItemID: ''
   },
   mutations: {
-
+    setItem (state, value) {
+      state.mItemID = value
+    }
   },
   actions: {
 

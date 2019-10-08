@@ -1,23 +1,81 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import comFun from './comfun.js'
+// 定义组件
 
 Vue.use(Router)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
+// 定义路由
+const routes = [
+  {
+    path: '/login',
+    name: 'login',
+    meta: {
+      title: 'Login - 登录',
+      hideInMenu: true
     },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }
-  ]
+    component: () => import('./Login.vue')
+  },
+  // Main.vue(HeaderR + router-view)
+  {
+    path: '/',
+    name: 'main',
+    component: () => import('./Main.vue'),
+    // router-view
+    children: [
+      // 控制台control
+      {
+        path: '/control',
+        name: 'control',
+        component: () => import('./views/Control.vue')
+      },
+      // 生产监管大区
+      {
+        path: '/sc',
+        name: 'sc',
+        component: () => import('./views/SC/Home.vue')
+      },
+      // 施工监管大区
+      {
+        path: '/sg',
+        name: 'sg',
+        component: () => import('./views/SG/Home.vue')
+      },
+      // 管理大区
+      {
+        path: '/manage',
+        name: 'manage',
+        component: () => import('./views/manage/Home.vue')
+      }
+    ]
+  }
+
+]
+
+// new Router实例，传routes配置参数注入路由
+// 输出以便main.js挂载根实例
+var router = new Router({
+  routes
 })
+// 设置跳转规则（管理员或者未登录状态）
+router.beforeEach((to, from, next) => {
+  // 取得用户数据
+  let username = comFun.getCookie('roadmUserID')
+  if (!username && to.path !== '/login') {
+    console.log('没有username且不是login来的' + username)
+    next('/login')
+  } else if (to.name === 'control') {
+    // console.log('有' + username)
+    // window.location.reload()
+    next()
+  } else {
+    next()
+  }
+})
+
+// 为了注释报错（相同途径点击会报错）
+const originalPush = Router.prototype.push
+Router.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+export default router
