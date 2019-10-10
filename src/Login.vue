@@ -3,7 +3,7 @@
 </style>
 <template>
     <div>
-        <div class="mclas">login我是登录大页面</div>
+        <!-- <div class="mclas">login我是登录大页面</div> -->
     <Row>
         <Col>
             <Card style="width:320px;height:250px;margin: 150px auto">

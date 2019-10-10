@@ -32,7 +32,13 @@
 </style>
 <template>
   <div>
+    <div class="header">
+      <div class="time"></div>
+      <div class="mid"></div>
+      <div class="right"></div>
+    </div>
     <Header>
+
       <Menu mode="horizontal" theme="dark" active-name="1" class="menu">
 
         <div class="layout-logo">
@@ -43,22 +49,11 @@
             <span>项目名：{{item.ItemDes}}</span>
             <span style="float:right;color:#ccc">项目ID:{{item.mItemID}}</span>
           </Option>
-          <!-- <Option value="London" label="London">
-            <span>London</span>
-            <span style="float:right;color:#ccc">U.K.</span>
-          </Option>
-          <Option value="Sydney" label="Sydney" selected>
-            <span>Sydney</span>
-            <span style="float:right;color:#ccc">Australian</span>
-          </Option> -->
         </Select>
         <div class="layout-nav r-layout-nav">
           <MenuItem name="1" @click.native="choseToLink(0)">
             <Icon type="ios-analytics"></Icon>进入管理
           </MenuItem>
-          <!-- <MenuItem name="2" @click.native="choseToLink(1)">
-            <Icon type="ios-analytics"></Icon>新建项目
-          </MenuItem> -->
           <MenuItem name="3" @click.native="exit()">
             <Icon type="ios-paper"></Icon>退出登录
           </MenuItem>

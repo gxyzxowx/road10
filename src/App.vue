@@ -13,8 +13,8 @@ export default {
 <style>
 
 html,body{
-  height: 100%;
-  overflow: hidden;
+  /* height: 100%; */
+  overflow-y: scroll;
   margin: 0;
   padding: 0;
 }

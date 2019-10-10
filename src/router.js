@@ -23,7 +23,7 @@ const routes = [
     component: () => import('./Main.vue'),
     // router-view
     children: [
-      // 控制台control
+      // 控制台control项目总览
       {
         path: '/control',
         name: 'control',
