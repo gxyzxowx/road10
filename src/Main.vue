@@ -188,7 +188,7 @@ export default {
     }
     this.comFun.post('/User/getUserItem', obj, this).then(
       rs => {
-        console.log(rs)
+        // console.log(rs)
         if (rs.code === 0) {
           this.items = rs.data
           // 取第一个复制给select,且存入vuex
