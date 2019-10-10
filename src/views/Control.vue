@@ -122,7 +122,15 @@
         </div>
       </div>
     </div>
-    <div class="mid"></div>
+    <div class="mid">
+      <!-- <div class="kuang">
+          <div class="L"></div>
+          <div class="L"></div>
+          <div class="L"></div>
+          <div class="L"></div>
+        </div> -->
+      <Map style="height:810px;"></Map>
+    </div>
     <div class="right">
       <div class="columnar col">
         <div class="kuang">
@@ -133,12 +141,33 @@
         </div>
         <div class="content">
           <div class="title">拌合站产量统计</div>
-          <!-- <PieChart :id="'pie2'" :data="dataPie2" style="height:180px"></PieChart> -->
-          <BarChart style="height:180px"></BarChart>
+          <BarChart :id="'bar1'" :data="dataBar1" style="height:180px"></BarChart>
         </div>
       </div>
-      <div class="curve col"></div>
-      <div class="columnar col"></div>
+      <div class="curve col">
+        <div class="kuang">
+          <div class="L"></div>
+          <div class="L"></div>
+          <div class="L"></div>
+          <div class="L"></div>
+        </div>
+        <div class="content">
+          <div class="title">每日生产总量统计</div>
+          <CurveChart :id="'curve1'" :data="dataCurve1" style="height:180px"></CurveChart>
+        </div>
+      </div>
+      <div class="columnar col">
+        <div class="kuang">
+          <div class="L"></div>
+          <div class="L"></div>
+          <div class="L"></div>
+          <div class="L"></div>
+        </div>
+        <div class="content">
+          <div class="title">摊铺和碾压里程统计</div>
+          <CurveChart :id="'bar2'" :data="dataBar2" style="height:180px"></CurveChart>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -146,6 +175,8 @@
 <script>
 import PieChart from '@/components/PieChart.vue'
 import BarChart from '@/components/BarChart.vue'
+import CurveChart from '@/components/CurveChart.vue'
+import Map from '@/components/Map.vue'
 export default {
   data () {
     return {
@@ -163,7 +194,10 @@ export default {
         AlarmLevelData: []
       },
       dataPie1: null,
-      dataPie2: null
+      dataPie2: null,
+      dataBar1: null,
+      dataCurve1: null,
+      dataBar2: null
     }
   },
   computed: {
@@ -175,7 +209,7 @@ export default {
     // },
   },
   created () {
-    // 得到当前项目id.目前用的300延迟，之后可用其他方案代替
+    // 得到当前项目id.目前用的500延迟，之后可用其他方案代替
 
     setTimeout(() => {
       this.itemId = this.$store.state.mItemID
@@ -197,8 +231,14 @@ export default {
             this.dataPie1 = this.handlePieData(rs.data.AlarmData.data, 'type_name', 'rep', '预警类型分类统计')
             // 预警级别分类
             this.dataPie2 = this.handlePieData(rs.data.AlarmLevelData.data, 'level_name', 'rep', '预警级别分类统计')
+            // 各个标段总量统计
+            this.dataBar1 = this.handleBarData(rs.data.BhBidData, 'name', 'value')
+            // 每日生产总量统计
+            this.dataCurve1 = this.handleCurveData(rs.data.BhDayData.data, 'time', 'value')
+            // 摊铺和碾压统计
+            this.dataBar2 = this.handleBarData(rs.data.TpData, 'name', 'value')
+            // console.log(JSON.stringify(rs.data))TpData
 
-            // console.log(JSON.stringify(rs.data))
             // console.log(JSON.stringify(this.datas.AlarmLevelData))
             // 预警级别饼图
           } else {
@@ -208,9 +248,10 @@ export default {
           console.log(err)
         }
       )
-    }, 400)
+    }, 500)
   },
   methods: {
+    // 处理饼图数据
     handlePieData (data, name, rep, title) {
       let legenddata = []
       let seriesdata = []
@@ -231,7 +272,7 @@ export default {
           orient: 'vertical',
           left: 'left',
           textStyle: {
-            color: '#CCE2FB'
+            color: '#9FC9F7'
           },
           data: legenddata
         },
@@ -254,12 +295,112 @@ export default {
         ]
       }
       return option
+    },
+    // 处理柱状图数据
+    handleBarData (data, name, val) {
+      let xAxisdata = []
+      let seriesdata = []
+      for (var i = 0; i < data.length; i++) {
+        xAxisdata.push(data[i][name])
+        seriesdata.push(data[i][val])
+      }
+      let option = {
+        color: ['#6996F3'],
+        textStyle: {
+          color: '#9FC9F7'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        grid: {
+          top: '3%',
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: xAxisdata,
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            splitLine: { show: true, lineStyle: { color: ['#333'] } } // 网格线
+          }
+        ],
+        series: [
+          {
+            name: '.',
+            type: 'bar',
+            itemStyle: {
+              normal: {
+                // 这里是重点
+                color: function (params) {
+                // 注意，如果颜色太少的话，后面颜色不会自动循环，最好多定义几个颜色
+                  var colorList = ['#14C6CA', '#6996F3', '#DA6C75', '#FEAB67', '#41A8F2', '#AB90DF']
+                  return colorList[params.dataIndex]
+                }
+              }
+            },
+            barWidth: '60%',
+            data: seriesdata
+          }
+        ]
+      }
+      return option
+    },
+    // 处理曲线图
+    handleCurveData (data, time, val) {
+      let xAxisdata = []
+      let seriesdata = []
+      for (var i = 0; i < data.length; i++) {
+        xAxisdata.push(data[i][time])
+        seriesdata.push(data[i][val])
+      }
+      let option = {
+        color: ['#6996F3'],
+        textStyle: {
+          color: '#9FC9F7'
+        },
+        xAxis: {
+          type: 'category',
+          data: xAxisdata
+        },
+        yAxis: {
+          type: 'value',
+          splitLine: { show: true, lineStyle: { color: ['#333'] } } // 网格线
+        },
+        grid: {
+          top: '3%',
+          left: '3%',
+          right: '0',
+          bottom: '3%',
+          containLabel: true
+        },
+        series: [{
+          data: seriesdata,
+          type: 'line',
+          smooth: true
+        }]
+      }
+      return option
     }
 
   },
   components: {
     PieChart,
-    BarChart
+    BarChart,
+    CurveChart,
+    Map
   }
 }
 </script>
