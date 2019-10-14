@@ -1,0 +1,80 @@
+.schome,.scdata {
+  background: #fff;
+  height: 100%;
+  padding:40px;
+  .title{
+    display: flex;
+    .selects{
+      width: 900px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      // 选择器样式修改
+      .ivu-select-single .ivu-select-selection{
+        height: 58px;
+        line-height: 58px;
+        background: #00C4C0FF;
+        .ivu-select-placeholder{
+          line-height: 58px;
+          height: 58px;
+          color:#fff;
+          font-size: 25px;
+        }
+        .ivu-select-selected-value{
+          height: 58px;
+          color:#fff;
+          font-size: 25px;
+          line-height: 58px;
+        }
+        .ivu-select{
+          color:#fff;
+          font-size: 25px;
+        }
+        // 箭头
+        .ivu-select-arrow{
+          font-size: 28px;
+          color:#fff;
+        }
+      }
+      // 选择日期样式修改
+      .ivu-input{
+        background: #00C4C0FF;
+        color:#fff;
+         height: 58px;
+         font-size: 27px;
+
+      }
+      input::-webkit-input-placeholder{color:#fff!important;}
+      .ivu-input-suffix{
+        margin-right: 10px;
+      }
+      .ivu-input-suffix i{
+        font-size: 28px;
+        color:#fff;
+        line-height: 58px;
+      }
+    }
+    .btn{
+      width:154px;
+      box-sizing: border-box;
+      height:60px;
+      background:rgba(28,106,171,1);
+      border-radius:30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding:18px 22px;
+      margin-left: 60px;
+      img{
+        margin-top: 5px;
+        width: 40px;
+        height: 40px;
+      }
+      span{
+        font-size: 27px;
+        color:#fff;
+        margin-top: 4px;
+      }
+    }
+  }
+}

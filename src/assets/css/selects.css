@@ -1,0 +1,93 @@
+.schome,
+.scdata {
+  background: #fff;
+  height: 100%;
+  padding: 40px;
+}
+.schome .title,
+.scdata .title {
+  display: flex;
+}
+.schome .title .selects,
+.scdata .title .selects {
+  width: 900px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.schome .title .selects .ivu-select-single .ivu-select-selection,
+.scdata .title .selects .ivu-select-single .ivu-select-selection {
+  height: 58px;
+  line-height: 58px;
+  background: #00C4C0FF;
+}
+.schome .title .selects .ivu-select-single .ivu-select-selection .ivu-select-placeholder,
+.scdata .title .selects .ivu-select-single .ivu-select-selection .ivu-select-placeholder {
+  line-height: 58px;
+  height: 58px;
+  color: #fff;
+  font-size: 25px;
+}
+.schome .title .selects .ivu-select-single .ivu-select-selection .ivu-select-selected-value,
+.scdata .title .selects .ivu-select-single .ivu-select-selection .ivu-select-selected-value {
+  height: 58px;
+  color: #fff;
+  font-size: 25px;
+  line-height: 58px;
+}
+.schome .title .selects .ivu-select-single .ivu-select-selection .ivu-select,
+.scdata .title .selects .ivu-select-single .ivu-select-selection .ivu-select {
+  color: #fff;
+  font-size: 25px;
+}
+.schome .title .selects .ivu-select-single .ivu-select-selection .ivu-select-arrow,
+.scdata .title .selects .ivu-select-single .ivu-select-selection .ivu-select-arrow {
+  font-size: 28px;
+  color: #fff;
+}
+.schome .title .selects .ivu-input,
+.scdata .title .selects .ivu-input {
+  background: #00C4C0FF;
+  color: #fff;
+  height: 58px;
+  font-size: 27px;
+}
+.schome .title .selects input::-webkit-input-placeholder,
+.scdata .title .selects input::-webkit-input-placeholder {
+  color: #fff!important;
+}
+.schome .title .selects .ivu-input-suffix,
+.scdata .title .selects .ivu-input-suffix {
+  margin-right: 10px;
+}
+.schome .title .selects .ivu-input-suffix i,
+.scdata .title .selects .ivu-input-suffix i {
+  font-size: 28px;
+  color: #fff;
+  line-height: 58px;
+}
+.schome .title .btn,
+.scdata .title .btn {
+  width: 154px;
+  box-sizing: border-box;
+  height: 60px;
+  background: #1c6aab;
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+  margin-left: 60px;
+}
+.schome .title .btn img,
+.scdata .title .btn img {
+  margin-top: 5px;
+  width: 40px;
+  height: 40px;
+}
+.schome .title .btn span,
+.scdata .title .btn span {
+  font-size: 27px;
+  color: #fff;
+  margin-top: 4px;
+}
