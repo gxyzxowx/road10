@@ -2,7 +2,7 @@
 </style>
 <style scoped lang="less">
 .layout .header {
-  // height: 385px;
+  height: 215px;
   background-image: url(~@/assets/img/top.png);
   background-repeat: no-repeat;
   background-position: top center;
@@ -57,6 +57,7 @@
 
       }
     }
+    // 中间3个按钮
     .btns {
       margin-top: 72px;
       display: flex;
@@ -86,6 +87,9 @@
             margin-right: 6px;
           }
         }
+      }
+      .btn.actived{
+        background: #2288D6;
       }
     }
   }
@@ -125,7 +129,6 @@
 <template>
   <div class="layout" style="height:100%">
     <Layout style="height:100%; background: #050926;">
-      <!-- <HeaderR @reloadControl="reloadControl" @choseToLink="choseToLink" ></HeaderR> -->
       <div class="header">
         <div class="time"><span>{{settime}}</span></div>
         <div class="mid">
@@ -147,9 +150,9 @@
             </div>
           </div>
           <div class="btns">
-            <div class="btn" @click="linkTo('/control')"><div class="texts"><img src="~@/assets/img/zl.png" alt=""><span>项目总览</span></div></div>
-            <div class="btn" @click="linkTo('/sc')"><div class="texts"><img src="~@/assets/img/zl.png" alt=""><span>生产监管</span></div></div>
-            <div class="btn" @click="linkTo('/sg')"> <div class="texts"><img src="~@/assets/img/zl.png" alt=""><span>施工监管</span></div></div>
+            <div class="btn" :class="{actived :actived[0]}" @click="linkTo('/control',0)"><div class="texts"><img src="~@/assets/img/zl.png" alt=""><span>项目总览</span></div></div>
+            <div class="btn" :class="{actived :actived[1]}" @click="linkTo('/sc',1)"><div class="texts"><img src="~@/assets/img/sc.png" alt=""><span>生产监管</span></div></div>
+            <div class="btn" :class="{actived :actived[2]}" @click="linkTo('/sg',2)"> <div class="texts"><img src="~@/assets/img/sg.png" alt=""><span>施工监管</span></div></div>
           </div>
         </div>
         <div class="right">
@@ -163,7 +166,6 @@
   </div>
 </template>
 <script>
-// import HeaderR from '@/components/HeaderR.vue'
 
 export default {
   data () {
@@ -172,11 +174,16 @@ export default {
       choseItemName: '',
       items: [],
       settime: '',
-      showView: true
+      showView: true,
+      actived: [true, false, false],
+      oldIndex: 0
     }
   },
   created () {
-    this.$router.push('/control')
+    // this.$router.push('/control')
+    // 测试
+    this.$router.push('/sc')
+    // 测试完毕
     setInterval(() => {
       this.getCurrentDate()
     }, 1000)
@@ -217,10 +224,6 @@ export default {
       choseName = choseName[0].ItemDes
       this.choseItemName = choseName
 
-      // 存入vuex
-      let itemInfo = [this.choseItem, this.choseItemName]
-      this.$store.commit('setItem', itemInfo)
-
       // 刷新链入控制台并刷新
       this.showView = false // 通过v-if移除router-view节点
       this.$nextTick(() => {
@@ -228,11 +231,23 @@ export default {
       })
       this.$router.push('control')
       console.log(choseName + '切换项目了')
+
+      // 存入vuex
+      setTimeout(() => {
+        let itemInfo = [this.choseItem, this.choseItemName]
+        this.$store.commit('setItem', itemInfo)
+      }, 50)
+
       return false
     },
     // 路由
-    linkTo (path) {
+    linkTo (path, index) {
       this.$router.push(path)
+      // 变色
+      if (index === this.oldIndex) return
+      this.actived[index] = true
+      this.actived[this.oldIndex] = false
+      this.oldIndex = index
     },
     exit () {
       // 删除cookie数据并跳转到Login

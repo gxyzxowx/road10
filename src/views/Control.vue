@@ -24,6 +24,7 @@
   }
   .mid {
     flex: 1;
+    margin: 0 15px;
   }
   .col {
     position: relative;
@@ -50,7 +51,7 @@
     .L:nth-child(1){
       background-image: url(~@/assets/img/top-left.png);
       top:-4px;
-      left: -4px;
+      left: -4px
     }
     .L:nth-child(2){
       background-image: url(~@/assets/img/top-right.png);
@@ -123,13 +124,7 @@
       </div>
     </div>
     <div class="mid">
-      <!-- <div class="kuang">
-          <div class="L"></div>
-          <div class="L"></div>
-          <div class="L"></div>
-          <div class="L"></div>
-        </div> -->
-      <Map style="height:810px;"></Map>
+      <Map style="height:810px;" :data="datas.DevData"></Map>
     </div>
     <div class="right">
       <div class="columnar col">
@@ -180,18 +175,16 @@ import Map from '@/components/Map.vue'
 export default {
   data () {
     return {
+      ifdisplayItem: false,
       itemName: '',
       // itemId页面生成时取得，没有取到就监听，直到取到了再ajax再呈现页面信息
       itemId: 1,
-      // 项目信息
-      ItemData: {},
-      // 预警类型饼图
-      AlarmData: [],
       // hello: this.isF
       datas: {
+        // 项目信息
         ItemData: {},
-        AlarmData: [],
-        AlarmLevelData: []
+        // 地图-设备状态
+        DevData: []
       },
       dataPie1: null,
       dataPie2: null,
@@ -200,21 +193,27 @@ export default {
       dataBar2: null
     }
   },
-  computed: {
-
+  mounted () {
+    if (!this.ifdisplayItem) {
+    // 得到项目详情
+      this.displayItem()
+      this.ifdisplayItem = true
+    }
   },
   watch: {
-    // '$store.state.mItemID': function (newVal, oldVal) {
-    //   console.log('watch到了' + oldVal + '变成：' + newVal)
-    // },
+    '$store.state.mItemID': function (newVal, oldVal) {
+      console.log('watch到了,项目' + oldVal + '变成：项目' + newVal)
+      // 切换项目时得到项目详情
+      this.displayItem()
+    },
+    immediate: true
   },
-  created () {
-    // 得到当前项目id.目前用的500延迟，之后可用其他方案代替
-
-    setTimeout(() => {
+  methods: {
+    // 得到项目数据
+    displayItem () {
       this.itemId = this.$store.state.mItemID
       this.itemName = this.$store.state.mItemDes
-      console.log('control刷新了，当前项目是：' + this.itemId)
+      // console.log('control刷新了，当前项目是：' + this.itemId)
       // 取得数据
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),
@@ -223,24 +222,23 @@ export default {
       // console.log(obj)
       this.comFun.post('/Index/getHomePageData', obj, this).then(
         rs => {
-          // console.log(rs)
+        // console.log(rs)
           if (rs.code === 0) {
-            //  项目信息
+          //  项目信息
             this.datas.ItemData = rs.data.ItemData
             // 预警类型饼图
             this.dataPie1 = this.handlePieData(rs.data.AlarmData.data, 'type_name', 'rep', '预警类型分类统计')
-            // 预警级别分类
+            // 预警级别分类饼图
             this.dataPie2 = this.handlePieData(rs.data.AlarmLevelData.data, 'level_name', 'rep', '预警级别分类统计')
-            // 各个标段总量统计
+            // 各个标段总量统计柱状图
             this.dataBar1 = this.handleBarData(rs.data.BhBidData, 'name', 'value')
             // 每日生产总量统计
             this.dataCurve1 = this.handleCurveData(rs.data.BhDayData.data, 'time', 'value')
             // 摊铺和碾压统计
             this.dataBar2 = this.handleBarData(rs.data.TpData, 'name', 'value')
-            // console.log(JSON.stringify(rs.data))TpData
-
-            // console.log(JSON.stringify(this.datas.AlarmLevelData))
-            // 预警级别饼图
+            // 设备状态（地图）
+            this.datas.DevData = rs.data.DevData
+            // console.log(JSON.stringify(rs.data))
           } else {
           }
         },
@@ -248,9 +246,7 @@ export default {
           console.log(err)
         }
       )
-    }, 500)
-  },
-  methods: {
+    },
     // 处理饼图数据
     handlePieData (data, name, rep, title) {
       let legenddata = []

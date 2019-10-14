@@ -3,14 +3,15 @@
 	"elementType": "geometry",
 	"stylers": {
 			"visibility": "on",
-			"color": "#ccd6d7ff"
+			"color": "#113549ff"
 	}
 }, {
-	"featureType": "land",
-	"elementType": "geometry",
-	"stylers": {
-			"color": "#edf3f3ff" 
-	}
+    "featureType": "land",
+    "elementType": "geometry",
+    "stylers": {
+        "visibility": "on",
+        "color": "#091220ff"
+    }
 }, {
     "featureType": "railway",
     "elementType": "geometry",
@@ -40,7 +41,7 @@
     "featureType": "arterial",
     "elementType": "geometry.fill",
     "stylers": {
-    "visibility": "off"
+    "visibility": "on"
     }
 }, {
     "featureType": "poi",
@@ -64,13 +65,44 @@
     "featureType": "manmade",
     "elementType": "all",
     "stylers": {
-    "color": "#d1d1d1"
+    "color": "#2dc4bbff"
     }
 }, {
     "featureType": "local",
-    "elementType": "all",
+    "elementType": "geometry",
     "stylers": {
-    "color": "#d1d1d1"
+        "visibility": "on",
+        "weight": 1
+    }
+}, {
+    "featureType": "local",
+    "elementType": "geometry.fill",
+    "stylers": {
+        "color": "#12223dff"
+    }
+}, {
+    "featureType": "local",
+    "elementType": "geometry.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "local",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "on"
+    }
+}, {
+    "featureType": "local",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#979c9aff"
+    }
+}, {
+    "featureType": "local",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffffff"
     }
 }, {
     "featureType": "arterial",
@@ -95,5 +127,35 @@
     "elementType": "labels.text.fill",
     "stylers": {
         "visibility": "off"
+    }
+}, {
+    "featureType": "country",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#2dc4bbff"
+    }
+}, {
+    "featureType": "country",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+},{
+    "featureType": "district",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 20
+    }
+}, {
+    "featureType": "district",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#2dc4bbff"
+    }
+}, {
+    "featureType": "district",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
     }
 }]

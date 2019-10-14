@@ -33,7 +33,26 @@ const routes = [
       {
         path: '/sc',
         name: 'sc',
-        component: () => import('./views/SC/Home.vue')
+        component: () => import('./views/SC/Home.vue'),
+        children: [
+          {
+            path: '/sc/home',
+            component: () => import('./views/SC/SChome.vue')
+          }, {
+            path: '/sc/SCdata',
+            component: () => import('./views/SC/SCdata.vue')
+          }, {
+            path: '/sc/SCquality',
+            component: () => import('./views/SC/SCquality.vue')
+          }, {
+            path: '/sc/SCgrade',
+            component: () => import('./views/SC/SCgrade.vue')
+          }, {
+            path: '/sc/SCwarn',
+            component: () => import('./views/SC/SCwarn.vue')
+          }
+
+        ]
       },
       // 施工监管大区
       {
@@ -62,7 +81,7 @@ router.beforeEach((to, from, next) => {
   // 取得用户数据
   let username = comFun.getCookie('roadmUserID')
   if (!username && to.path !== '/login') {
-    console.log('没有username且不是login来的' + username)
+    console.log('没有用户数据或者用户数据过期' + username)
     next('/login')
   } else if (to.name === 'control') {
     // console.log('有' + username)
