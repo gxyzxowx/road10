@@ -229,7 +229,7 @@ export default {
       this.$nextTick(() => {
         this.showView = true // DOM更新后再通过v-if添加router-view节点
       })
-      this.$router.push('control')
+      this.$router.push({ path: '/control' })
       console.log(choseName + '切换项目了')
 
       // 存入vuex

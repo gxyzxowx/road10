@@ -17,10 +17,10 @@
     <div class="title">
       <div class="selects">
         <Select v-model="select.mClTypeValue" style="width:200px" placeholder="材料类型">
-          <Option v-for="item in mClTypeValueList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <Option v-for="item in show.mClTypeValueList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
         <Select v-model="select.mItemBid" style="width:200px" placeholder="工程标段">
-          <Option v-for="item in mItemBidList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <Option v-for="item in show.mItemBidList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
         <DatePicker type="date" placeholder="开始时间" style="width: 200px" v-model="select.start_time" @on-change="changeType0"></DatePicker>
         <DatePicker type="date" placeholder="结束时间" style="width: 200px" v-model="select.end_time" @on-change="changeType1"></DatePicker>
@@ -74,25 +74,42 @@ export default {
       dataPie2: null,
       // 质量，按合格率统计饼图
       dataPie3: null,
-      mClTypeValueList: [
-        {
-          value: 'New York',
-          label: 'New York'
-        },
-        {
-          value: 'London',
-          label: 'London'
-        }
-      ],
-      mItemBidList: [
-        {
-          value: '标段1',
-          label: '标段1'
-        }
-      ]
+      show: {
+        mItemBidList: [],
+        mClTypeValueList: []
+      }
     }
   },
   mounted () {
+    // 得到材料列表
+    // 得到标段列表
+    let obj = {
+      mUserID: this.comFun.getCookie('roadmUserID'),
+      mItemID: this.$store.state.mItemID
+    }
+    // console.log(JSON.stringify(obj))
+    this.comFun.post('/Cl/getClTypeList', obj, this).then((rs) => {
+      // console.log(JSON.stringify(rs))
+      if (rs.code === 0) {
+        rs.data.map((item, index, arr) => {
+          arr[index].label = item.mClTypeName
+          arr[index].value = item.mClTypeValue
+        })
+        this.show.mClTypeValueList = rs.data
+      }
+    }, (err) => { console.log(err) })
+    this.comFun.post('/Item/getItemBid', obj, this).then((rs) => {
+      // console.log(JSON.stringify(rs))
+      if (rs.code === 0) {
+        let num = rs.data.mItemBidSun
+        for (let i = num; i > 0; i--) {
+          this.show.mItemBidList.push({
+            value: i,
+            label: i
+          })
+        }
+      }
+    }, (err) => { console.log(err) })
     // 得到总览数据
     this.getData()
   },
@@ -114,11 +131,9 @@ export default {
         start_time: this.select.start_time,
         end_time: this.select.end_time
       }
-      console.log(typeof this.select.start_time)
-
       console.log(JSON.stringify(obj))
       this.comFun.post('/Produce_J_G/index', obj, this).then((rs) => {
-        console.log(JSON.stringify(rs))
+        // console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           // 各个标段总量统计柱状图
           this.dataBar1 = this.handleBarData(rs.data.BhBidData, 'name', 'value')
