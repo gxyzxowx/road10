@@ -1,4 +1,4 @@
-<style lang="less">
+<style lang="less" scoped>
 .content{
   margin-top: 30px;
   .bar1{
@@ -14,24 +14,7 @@
 <template>
   <!-- 生产监管总览 -->
   <div class="schome">
-    <div class="title">
-      <div class="selects">
-        <Select v-model="select.mClTypeValue" style="width:200px" placeholder="材料类型">
-          <Option v-for="item in show.mClTypeValueList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-        <Select v-model="select.mItemBid" style="width:200px" placeholder="工程标段">
-          <Option v-for="item in show.mItemBidList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-        <DatePicker type="date" placeholder="开始时间" style="width: 200px" v-model="select.start_time" @on-change="changeType0"></DatePicker>
-        <DatePicker type="date" placeholder="结束时间" style="width: 200px" v-model="select.end_time" @on-change="changeType1"></DatePicker>
-      </div>
-      <div class="btn" @click="getData()">
-        <span>
-          <img src="@/assets/img/sc/search.png" alt />
-        </span>
-        <span>搜索</span>
-      </div>
-    </div>
+    <Search v-on:getData="getData"></Search>
     <div class="content">
       <div class="top">
         <div class="bar1">
@@ -53,8 +36,9 @@
   </div>
 </template>
 <script>
-import '@/assets/css/selects.css'
+
 import PieChart from '@/components/PieChart.vue'
+import Search from '@/components/Search.vue'
 import BarChart from '@/components/BarChart.vue'
 export default {
   data () {
@@ -73,72 +57,32 @@ export default {
       // 预警级别分类饼图
       dataPie2: null,
       // 质量，按合格率统计饼图
-      dataPie3: null,
-      show: {
-        mItemBidList: [],
-        mClTypeValueList: []
-      }
+      dataPie3: null
     }
   },
   mounted () {
-    // 得到材料列表
-    // 得到标段列表
-    let obj = {
-      mUserID: this.comFun.getCookie('roadmUserID'),
-      mItemID: this.$store.state.mItemID
-    }
-    // console.log(JSON.stringify(obj))
-    this.comFun.post('/Cl/getClTypeList', obj, this).then((rs) => {
-      // console.log(JSON.stringify(rs))
-      if (rs.code === 0) {
-        rs.data.map((item, index, arr) => {
-          arr[index].label = item.mClTypeName
-          arr[index].value = item.mClTypeValue
-        })
-        this.show.mClTypeValueList = rs.data
-      }
-    }, (err) => { console.log(err) })
-    this.comFun.post('/Item/getItemBid', obj, this).then((rs) => {
-      // console.log(JSON.stringify(rs))
-      if (rs.code === 0) {
-        let num = rs.data.mItemBidSun
-        for (let i = num; i > 0; i--) {
-          this.show.mItemBidList.push({
-            value: i,
-            label: i
-          })
-        }
-      }
-    }, (err) => { console.log(err) })
     // 得到总览数据
     this.getData()
   },
   methods: {
-    changeType0 (val) {
-      console.log(val)
-      this.select.start_time = val
-    },
-    changeType1 (val) {
-      console.log(val)
-      this.select.end_time = val
-    },
-    getData () {
+    getData (emitobj) {
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),
-        mItemID: this.$store.state.mItemID,
-        mClTypeValue: this.select.mClTypeValue,
-        mItemBid: this.select.mItemBid,
-        start_time: this.select.start_time,
-        end_time: this.select.end_time
+        mItemID: this.$store.state.mItemID
+      }
+      // 有emitobj是子组件点击搜索的时候
+      if (emitobj) {
+        console.log('是emit过来的参数:' + JSON.stringify(emitobj))
+        obj = { ...obj, ...emitobj }
       }
       console.log(JSON.stringify(obj))
       this.comFun.post('/Produce_J_G/index', obj, this).then((rs) => {
         // console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           // 各个标段总量统计柱状图
-          this.dataBar1 = this.handleBarData(rs.data.BhBidData, 'name', 'value')
+          this.dataBar1 = this.handleBarData(rs.data.BhBidData, 'name', 'value', '拌合站产量按标段统计')
           // 各个材料总量统计柱状图
-          this.dataBar2 = this.handleBarData2(rs.data.BhClTypeData, 'name', 'value')
+          this.dataBar2 = this.handleBarData(rs.data.BhClTypeData, 'name', 'value', '拌合站产量按材料类型统计', 1)
           // 预警类型饼图
           this.dataPie1 = this.handlePieData(rs.data.AlarmData.data, 'type_name', 'rep', '预警类型分类统计')
           // 预警级别分类饼图
@@ -149,7 +93,7 @@ export default {
       }, (err) => { console.log(err) })
     },
     // 处理柱状图数据
-    handleBarData (data, name, val) {
+    handleBarData (data, name, val, title, type) {
       let xAxisdata = []
       let seriesdata = []
       for (var i = 0; i < data.length; i++) {
@@ -158,7 +102,7 @@ export default {
       }
       let option = {
         title: {
-          text: '拌合站产量按标段统计',
+          text: title,
           textVerticalAlign: 'top'
         },
         color: ['#333'],
@@ -195,7 +139,7 @@ export default {
         ],
         series: [
           {
-            name: '.',
+            name: '产量',
             type: 'bar',
             itemStyle: {
               normal: {
@@ -212,75 +156,13 @@ export default {
           }
         ]
       }
-      return option
-    },
-    handleBarData2 (data, name, val) {
-      let xAxisdata = []
-      let seriesdata = []
-      for (var i = 0; i < data.length; i++) {
-        xAxisdata.push(data[i][name])
-        seriesdata.push(data[i][val])
-      }
-      let option = {
-        title: {
-          text: '拌合站产量按材料类型统计',
-          textVerticalAlign: 'top'
-        },
-        color: ['#333'],
-        textStyle: {
-          color: '#333'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        grid: {
-          top: '22%',
-          left: '0%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        dataZoom: [
+      if (type) {
+        // 是按材料类型的需要有滑动条
+        option.dataZoom = [
           {
             show: true,
             start: 0,
             end: 40
-          }
-        ],
-        xAxis: [
-          {
-            type: 'category',
-            data: xAxisdata,
-            axisTick: {
-              alignWithLabel: true
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            splitLine: { show: true, lineStyle: { color: ['#ddd'] } } // 网格线
-          }
-        ],
-        series: [
-          {
-            name: '.',
-            type: 'bar',
-            itemStyle: {
-              normal: {
-                // 这里是重点
-                color: function (params) {
-                // 注意，如果颜色太少的话，后面颜色不会自动循环，最好多定义几个颜色
-                  var colorList = ['#14C6CA', '#6996F3']
-                  return colorList[params.dataIndex]
-                }
-              }
-            },
-            barWidth: '25px',
-            data: seriesdata
           }
         ]
       }
@@ -346,7 +228,8 @@ export default {
   },
   components: {
     PieChart,
-    BarChart
+    BarChart,
+    Search
   }
 }
 </script>

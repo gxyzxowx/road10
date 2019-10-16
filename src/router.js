@@ -64,7 +64,25 @@ const routes = [
       {
         path: '/manage',
         name: 'manage',
-        component: () => import('./views/manage/Home.vue')
+        component: () => import('./views/manage/Home.vue'),
+        children: [
+          {
+            path: '/manage/item',
+            component: () => import('./views/manage/Mitem.vue')
+          },
+          {
+            path: '/manage/equip',
+            component: () => import('./views/manage/Mequip.vue')
+          },
+          {
+            path: '/manage/recipe',
+            component: () => import('./views/manage/Mrecipe.vue')
+          },
+          {
+            path: '/manage/user',
+            component: () => import('./views/manage/Muser.vue')
+          }
+        ]
       }
     ]
   }

@@ -157,7 +157,7 @@
         </div>
         <div class="right">
           <!-- 进入管理和退出 -->
-          <div class="manage"><div class="texts"><img src="~@/assets/img/manage.png" alt=""><span>进入管理</span></div></div>
+          <div class="manage" @click="manage()"><div class="texts"><img src="~@/assets/img/manage.png" alt=""><span>进入管理</span></div></div>
           <div class="exit" @click="exit()"><div class="texts"><img src="~@/assets/img/exit.png" alt=""><span>退出</span></div></div>
         </div>
       </div>
@@ -182,7 +182,7 @@ export default {
   created () {
     // this.$router.push('/control')
     // 测试
-    this.$router.push('/sc')
+    this.$router.push('/manage')
     // 测试完毕
     setInterval(() => {
       this.getCurrentDate()
@@ -254,6 +254,9 @@ export default {
       console.log('exit')
       this.comFun.delectCookie('roadmUserID')
       this.$router.push({ name: 'login' })
+    },
+    manage () {
+      this.$router.push('/manage')
     },
     // 获取今日时间
     getCurrentDate () {
