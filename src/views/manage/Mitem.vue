@@ -34,7 +34,7 @@
       <Table border :columns="itemTitle" :data="itemlist" :loading="loading" >
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: 5px" @click="importExcel(index)">导入</Button>
-        <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">修改</Button>
+        <Button type="primary" size="small" style="margin-right: 5px" @click="modify(index)">修改</Button>
         <Button type="error" size="small" @click="remove(index)">删除</Button>
         <Modal v-model="delectmodal" width="360">
           <p slot="header" style="color:#f60;text-align:center">
@@ -58,10 +58,34 @@
         </div>
     </div>
     </div>
-    <ImportExcel></ImportExcel>
+    <!-- 导入数据模态框 -->
+      <Modal
+        v-model="showExcelModel"
+        title="导入数据">
+        <ImportExcel></ImportExcel>
+    <div slot="footer"></div>
+    </Modal>
+    <!-- 新建项目模态框 -->
+    <Modal v-model="showNewProject" width="900">
+        <p slot="header" style="color:#333;text-align:center">
+            <Icon type="md-add"></Icon>
+            <span>新建项目</span>
+        </p>
+        <NewProject v-if="showNewProject"></NewProject>
+        <div slot="footer"></div>
+    </Modal>
+    <!-- 修改项目模态框 -->
+       <Modal v-model="showModifyProject" width="900" >
+        <p slot="header" style="color:#333;text-align:center">
+            <Icon type="md-add"></Icon>
+            <span>修改项目</span>
+        </p>
+        <NewProject v-if="showModifyProject"></NewProject>
+    </Modal>
   </div>
 </template>
 <script>
+import NewProject from '@/components/NewProject.vue'
 import ImportExcel from '@/components/ImportExcel.vue'
 export default {
   data () {
@@ -78,15 +102,17 @@ export default {
       },
       delectmodal: false,
       // 删除的索引
-      delectIndex: null,
+      selectIndex: null,
       // 搜索框输入的项目名称
       inputItem: '',
-      delectItemID: '',
+      selectItemID: '',
       delectItemDes: '',
       showExcelModel: false,
+      showNewProject: false,
+      showModifyProject: false,
       itemTitle: [
         {
-          title: '项目名称',
+          title: '项目描述',
           key: 'mItemDes'
         },
         {
@@ -173,6 +199,19 @@ export default {
       ]
     }
   },
+  watch: {
+    showExcelModel: function (newVal, oldVal) {
+      // 监听到关闭时
+      if (!newVal) {
+        this.clearStoreSelectItemID()
+      }
+    },
+    showModifyProject: function (newVal, oldVal) {
+      if (!newVal) {
+        this.clearStoreSelectItemID()
+      }
+    }
+  },
   mounted () {
     this.getData()
   },
@@ -188,35 +227,36 @@ export default {
         keywords: this.inputItem
       }
       this.comFun.post('/User/getItemList', obj, this).then((rs) => {
-        console.log(JSON.stringify(rs))
+        // console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           this.page.totaldata = rs.total
           this.itemlist = rs.data
         }
       }, (err) => { console.log(err) })
     },
-    show (index) {
-      this.$Modal.info({
-        title: 'User Info',
-        content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
-      })
+    // 修改，编辑项目
+    modify (index) {
+      this.selectIndex = index
+      this.selectItemID = this.itemlist[this.selectIndex].mItemID
+      this.$store.commit('selectItemID', this.selectItemID)
+      this.showModifyProject = true
     },
     // 新建项目
     createNewItem () {
-
+      this.showNewProject = true
     },
     // 准备删除
     remove (index) {
       this.delectItemDes = this.itemlist[index].mItemDes
       this.delectmodal = true
-      this.delectIndex = index
+      this.selectIndex = index
     },
     // 确认删除
     delItem () {
-      this.delectItemID = this.itemlist[this.delectIndex].mItemID
+      this.selectItemID = this.itemlist[this.selectIndex].mItemID
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),
-        mItemID: this.delectItemID
+        mItemID: this.selectItemID
       }
       this.comFun.post('/User/userDeleteItem', obj, this).then((rs) => {
         console.log(JSON.stringify(rs))
@@ -225,23 +265,31 @@ export default {
           setTimeout(() => {
             this.modal_loading = false
             this.delectmodal = false
-            this.itemlist.splice(this.delectIndex, 1)
+            this.itemlist.splice(this.selectIndex, 1)
             this.$Message.success('成功删除项目')
           }, 1000)
         }
       }, (err) => { console.log(err) })
     },
-    // 导入EXCEL数据表
-    importExcel () {
+    // 导入EXCEL数据表打开
+    importExcel (index) {
+      this.selectIndex = index
+      this.selectItemID = this.itemlist[this.selectIndex].mItemID
+      this.$store.commit('selectItemID', this.selectItemID)
       this.showExcelModel = true
     },
     changePage () {
       // 更换页数
       this.getData()
       console.log('切换page:' + this.page.current)
+    },
+    // 导入项目和修改项目关闭的时候情况store
+    clearStoreSelectItemID () {
+      this.$store.commit('selectItemID', '')
     }
   },
   components: {
+    NewProject,
     ImportExcel
   }
 }
