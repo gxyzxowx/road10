@@ -146,8 +146,8 @@ export default {
     }
   },
   watch: {
-    // 监听到关闭时
-    showModifyUser: function (newVal, oldVal) {
+    // 监听到关闭模态框时
+    showModifyModal: function (newVal, oldVal) {
       if (!newVal) {
         this.clearStoreselectItemID()
       }
@@ -167,8 +167,9 @@ export default {
         rows: this.page.rows,
         keywords: this.inputItem
       }
+      console.log(JSON.stringify(obj))
       this.comFun.post('/User/getUserList', obj, this).then((rs) => {
-        console.log(JSON.stringify(rs))
+        // console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           this.page.totaldata = rs.total
           rs.data.map((item, index, arr) => {
@@ -186,10 +187,11 @@ export default {
         }
       }, (err) => { console.log(err) })
     },
-    // 修改，编辑项目
+    // 修改，编辑用户
     modify (index) {
+      console.log(this.itemlist)
       this.selectIndex = index
-      this.selectItemID = this.itemlist[this.selectIndex].mItemID
+      this.selectItemID = this.itemlist[this.selectIndex].mUserID
       this.$store.commit('selectItemID', this.selectItemID)
       this.showModifyModal = true
     },
@@ -199,18 +201,20 @@ export default {
     },
     // 准备删除
     remove (index) {
-      this.delectItemDes = this.itemlist[index].mItemDes
+      this.delectItemDes = this.itemlist[index].mUserName
       this.delectmodal = true
       this.selectIndex = index
     },
     // 确认删除
     delItem () {
-      this.selectItemID = this.itemlist[this.selectIndex].mItemID
+      this.selectItemID = this.itemlist[this.selectIndex].mUserID
       let obj = {
-        mUserID: this.comFun.getCookie('roadmUserID'),
-        mItemID: this.selectItemID
+        delUserID: this.selectItemID,
+        mUserID: this.comFun.getCookie('roadmUserID')
+
       }
-      this.comFun.post('/User/userDeleteItem', obj, this).then((rs) => {
+      console.log(JSON.stringify(obj))
+      this.comFun.post('/User/userDeleteAdmin', obj, this).then((rs) => {
         console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           this.modal_loading = true
@@ -218,7 +222,7 @@ export default {
             this.modal_loading = false
             this.delectmodal = false
             this.itemlist.splice(this.selectIndex, 1)
-            this.$Message.success('成功删除项目')
+            this.$Message.success('成功删除成员')
           }, 1000)
         }
       }, (err) => { console.log(err) })

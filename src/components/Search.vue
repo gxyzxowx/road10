@@ -51,6 +51,7 @@ export default {
           arr[index].value = item.mClTypeValue
         })
         this.show.mClTypeValueList = rs.data
+        this.show.mClTypeValueList.unshift({ label: '全部', value: '' })
       }
     }, (err) => { console.log(err) })
     this.comFun.post('/Item/getItemBid', obj, this).then((rs) => {
@@ -63,6 +64,7 @@ export default {
             label: i
           })
         }
+        this.show.mItemBidList.unshift({ label: '全部', value: '' })
       }
     }, (err) => { console.log(err) })
   },

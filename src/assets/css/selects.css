@@ -84,7 +84,7 @@
 .scquality .title .selects input::-webkit-input-placeholder,
 .scgrade .title .selects input::-webkit-input-placeholder,
 .scwarn .title .selects input::-webkit-input-placeholder {
-  color: #fff!important;
+  color: #fff !important;
 }
 .schome .title .selects .ivu-input-suffix,
 .scdata .title .selects .ivu-input-suffix,
@@ -117,6 +117,7 @@
   align-items: center;
   padding: 18px 22px;
   margin-left: 60px;
+  cursor: pointer;
 }
 .schome .title .btn img,
 .scdata .title .btn img,

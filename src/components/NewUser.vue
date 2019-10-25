@@ -22,7 +22,6 @@
               :prop="'items.' + index + '.value'">
           <Row>
               <Col span="18">
-                  <!-- <Input type="text" v-model="item.value" placeholder="请输入单个项目id"></!-->
                   <Select v-model="item.value" style="width:200px" placeholder="请选择项目">
                     <Option v-for="option in selectlist" :value="option.mItemID" :key="option.mItemID">{{ option.ItemDes }}</Option>
                   </Select>
@@ -53,6 +52,8 @@ export default {
       index: 1,
       // 0新增，1修改
       type: 0,
+      // 要修改的用户的ID
+      selectItemID: '',
       selectlist: [],
       formDynamic: {
         mUserName: '',
@@ -68,6 +69,15 @@ export default {
     }
   },
   mounted () {
+    // 确定是修改项目还是新增项目
+    this.selectItemID = this.$store.state.selectItemID
+    if (this.selectItemID) {
+      // 编辑
+      this.type = 1
+      // console.log('是修改' + this.selectItemID)
+      // 得到数据并陈列
+      this.getUserData()
+    }
     // 得到所有项目列表不分页
     this.getData()
   },
@@ -80,35 +90,69 @@ export default {
     }
   },
   methods: {
+    getUserData () {
+      let obj = {
+        mUserID: this.comFun.getCookie('roadmUserID'),
+        editUserID: this.selectItemID
+      }
+      this.comFun.post('/User/getAdminInfo', obj, this).then((rs) => {
+        console.log(JSON.stringify(rs))
+        if (rs.code === 0) {
+          // 数据呈现
+          this.formDynamic.mUserName = rs.data.mUserName
+        }
+      }, (err) => { console.log(err) })
+    },
     handleSubmit (name) {
+      console.log(this.formDynamic)
       this.$refs[name].validate((valid) => {
         if (valid) {
-          // console.log(this.formDynamic)
-          console.log(1)
           let data = this.formDynamic
-          // 通过检验，新增/修改用户
           let itemarr = []
           data.items.map((item, index, arr) => {
-            console.log(2)
-            itemarr.push(item.value)
+            if (item.value) {
+              itemarr.push(item.value)
+            }
           })
           let itemID = itemarr.join(',')
-          let obj = {
-            mUserID: this.comFun.getCookie('roadmUserID'),
-            mUserName: data.mUserName,
-            mUserPwd: data.mUserPwd,
-            itemID: itemID
-          }
-          console.log(JSON.stringify(obj))
-          this.comFun.post('/User/addUser', obj, this).then((rs) => {
-            console.log(JSON.stringify(rs))
-            if (rs.code === 0) {
-              this.selectlist = rs.data
+          // 通过检验，新增/修改用户
+          if (this.type === 0) {
+            // 0是新增
+            let obj = {
+              mUserID: this.comFun.getCookie('roadmUserID'),
+              mUserName: data.mUserName,
+              mUserPwd: data.mUserPwd,
+              itemID: itemID
             }
-          }, (err) => { console.log(err) })
-          this.$Message.success('Success!')
+            // console.log(JSON.stringify(obj))
+            this.comFun.post('/User/addUser', obj, this).then((rs) => {
+              console.log(JSON.stringify(rs))
+              if (rs.code === 0) {
+                this.$Message.success('操作成功!请关闭该页并刷新查看。')
+              // 关闭该页并刷新
+              }
+            }, (err) => { console.log(err) })
+          } else {
+            console.log(132)
+            // 1是修改
+            let obj = {
+              mUserID: this.comFun.getCookie('roadmUserID'),
+              editUserID: this.selectItemID,
+              mUserPwd: data.mUserPwd,
+              itemID: itemID
+            }
+            console.log(JSON.stringify(obj))
+            this.comFun.post('/User/editAdminInfo', obj, this).then((rs) => {
+              console.log(JSON.stringify(rs))
+              if (rs.code === 0) {
+                this.$Message.success('操作成功!请关闭该页并刷新查看。')
+              } else {
+                this.$Message.error(rs.message)
+              }
+            }, (err) => { console.log(err) })
+          }
         } else {
-          this.$Message.error('Fail!')
+          this.$Message.error('操作失败!')
         }
       })
     },
@@ -131,7 +175,7 @@ export default {
         mUserID: this.comFun.getCookie('roadmUserID')
       }
       this.comFun.post('/User/getUserItem', obj, this).then((rs) => {
-        console.log(JSON.stringify(rs))
+        // console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           this.selectlist = rs.data
         }
