@@ -13,7 +13,10 @@ export default new Vuex.Store({
       bd: '',
       itemID: '',
       mKlID: ''
-    }
+    },
+    // 关闭新建/修改的modal状态量true/false
+    modalState: '',
+    modalStateKl: ''
   },
   mutations: {
     setItem (state, value) {
@@ -28,9 +31,25 @@ export default new Vuex.Store({
     equipUseItemID (state, value) {
       state.equipUseItemID = value
     },
-    klUse (state, value) {
-      // value是一个对象
-      state.klUse = value
+    // 新建、修改矿料时用的项目
+    setKlUseItem (state, value) {
+      state.klUse.itemID = value
+    },
+    // 新建、修改矿料时用的标段
+    setKlUseBd (state, value) {
+      state.klUse.bd = value
+    },
+    // 新建、修改矿料时用的矿料ID
+    setKlUsemKlID (state, value) {
+      state.klUse.mKlID = value
+    },
+    // 关闭新建/修改的Modal
+    setModalState (state, value) {
+      state.modalState = value
+    },
+    // 关闭新建/修改的Modal(矿料列表专用)
+    setModalStateKl (state, value) {
+      state.modalStateKl = value
     }
   },
   actions: {

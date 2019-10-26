@@ -151,14 +151,14 @@ export default {
             // 1是编辑 ，需要添加mItemID
             obj['mItemID'] = this.selectItemID
           }
-          console.log(obj)
+          // console.log(obj)
           this.comFun.post('/Item/userCreateItem', obj, this).then((rs) => {
             console.log(rs)
             if (rs.code === 0) {
-              // 成功,提示后返回控制台
+              console.log('修改项目成功')
+              // 成功,提示后返回并刷新
               this.$Message.success(rs.message)
-              this.$router.push('/manage/item')
-              return false
+              this.$store.commit('setModalState', false)
             } else {
               //  失败
               this.$Message.error(rs.message)

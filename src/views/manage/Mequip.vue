@@ -29,7 +29,7 @@
     <Select v-model="list.selectmDevType" style="width:150px;margin-right:15px;" size="large" placeholder="请选择设备类型">
         <Option v-for="item in list.mDevType" :value="item.mDevType" :key="item.mDevType">{{ item.mDevTypeName }}</Option>
     </Select>
-    <Button type="primary" size="large" icon="ios-search" v-on:click="getListData()">查看设备</Button>
+    <Button type="primary" size="large" icon="ios-search" v-on:click="getData()">查看设备</Button>
       </div>
       <div class="right">
         <Input
@@ -38,12 +38,12 @@
           style="margin-right:15px;"
           placeholder="请输入搜索的设备名称"
         />
-        <Button type="primary" size="large" icon="ios-search" style="margin-right:15px;" v-on:click="getListData()">搜索设备</Button>
+        <Button type="primary" size="large" icon="ios-search" style="margin-right:15px;" v-on:click="getData()">搜索设备</Button>
         <Button type="success" size="large" icon="md-add" @click="createNewItem()">新建设备</Button>
       </div>
     </div>
     <div class="bottom">
-      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" no-data-text="暂无数据，请切换查看条件查看数据">
+      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" no-data-text="暂无数据，请切换查看条件查看数据" v-if="showTable">
       <template slot-scope="{ row, index }" slot="action">
         <Button type="primary" size="small" style="margin-right: 5px" @click="more(index)">更多</Button>
         <Button type="primary" size="small" style="margin-right: 5px" @click="modify(index)">修改</Button>
@@ -135,6 +135,7 @@ export default {
       showNewModal: false,
       showModifyModal: false,
       showMoreModel: false,
+      showTable: true,
       itemTitle: [
         {
           title: '设备ID',
@@ -216,6 +217,29 @@ export default {
       if (!newVal) {
         this.clearStoreSelectItemID()
       }
+    },
+    // 监听模态框的状态
+    storeModalState: function (newVal) {
+      console.log('监听到关闭modal')
+      if (newVal === false) {
+        this.showNewModal = false
+        this.showModifyModal = false
+        // 重新刷新数据
+        this.getData()
+        // 重新展示数据
+        this.showTable = false
+        this.$nextTick(() => {
+          this.showTable = true
+        })
+        // 模态框状态归零
+        this.$store.commit('setModalState', '')
+      }
+    }
+  },
+  computed: {
+    // 监听模态框的状态
+    storeModalState: function () {
+      return this.$store.state.modalState
     }
   },
   mounted () {
@@ -273,7 +297,7 @@ export default {
       }, (err) => { console.log(err) })
     },
     // 查看list
-    getListData () {
+    getData () {
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),
         mItemID: this.list.selectItemID,

@@ -24,7 +24,7 @@
     <Select v-model="list.selectmItemBid" style="width:150px;margin-right:15px;" size="large" placeholder="请选择标段">
         <Option v-for="item in list.mItemBids" :value="item" :key="item">{{ item }}</Option>
     </Select>
-    <Button type="primary" size="large" icon="ios-search" v-on:click="getListData()">查看材料</Button>
+    <Button type="primary" size="large" icon="ios-search" v-on:click="getData()">查看材料</Button>
       </div>
       <div class="right">
         <Input
@@ -33,12 +33,12 @@
           style="margin-right:15px;"
           placeholder="请输入搜索的配方名称"
         />
-        <Button type="primary" size="large" icon="ios-search" style="margin-right:15px;" v-on:click="getListData()">搜索材料</Button>
+        <Button type="primary" size="large" icon="ios-search" style="margin-right:15px;" v-on:click="getData()">搜索材料</Button>
         <Button type="success" size="large" icon="md-add" @click="createNewItem()">新建材料</Button>
       </div>
     </div>
     <div class="bottom">
-      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" no-data-text="暂无数据，请切换查看条件查看数据">
+      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" no-data-text="暂无数据，请切换查看条件查看数据" v-if="showTable">
       <template slot-scope="{ row, index }" slot="action">
         <Button type="primary" size="small" style="margin-right: 5px" @click="more(index)">操作矿料</Button>
         <Button type="primary" size="small" style="margin-right: 5px" @click="modify(index)">修改</Button>
@@ -46,7 +46,7 @@
         <Modal v-model="delectmodal" width="360">
           <p slot="header" style="color:#f60;text-align:center">
             <Icon type="ios-information-circle"></Icon>
-            <span>删除配方:{{delectItemDes}}</span>
+            <span>删除材料:{{delectItemDes}}</span>
           </p>
           <div style="text-align:center">
             <p>删除后不可恢复</p>
@@ -130,6 +130,7 @@ export default {
       showNewModal: false,
       showModifyModal: false,
       showMoreModel: false,
+      showTable: true,
       itemTitle: [
         {
           title: '材料ID',
@@ -193,11 +194,32 @@ export default {
     // this.list.selectItemID
     computedmItemID: function getBd () {
       this.getCurrentBd()
+    },
+    // 监听模态框的状态
+    storeModalState: function (newVal) {
+      console.log('监听到关闭modal')
+      if (newVal === false) {
+        this.showNewModal = false
+        this.showModifyModal = false
+        // 重新刷新数据
+        this.getData()
+        // 重新展示数据
+        this.showTable = false
+        this.$nextTick(() => {
+          this.showTable = true
+        })
+        // 模态框状态归零
+        this.$store.commit('setModalState', '')
+      }
     }
   },
   computed: {
     computedmItemID: function () {
       return this.list.selectItemID
+    },
+    // 监听模态框的状态
+    storeModalState: function () {
+      return this.$store.state.modalState
     }
   },
   mounted () {
@@ -222,15 +244,9 @@ export default {
         }
       }, (err) => { console.log(err) })
     },
-    getSelectData (search) {
-      if (search) {
-        this.page.current = 1
-      }
+    getSelectData () {
       let obj = {
-        mUserID: this.comFun.getCookie('roadmUserID'),
-        page: this.page.current,
-        rows: this.page.rows,
-        keywords: this.inputItem
+        mUserID: this.comFun.getCookie('roadmUserID')
       }
       // 得到所有项目
       this.comFun.post('/User/getUserItem', obj, this).then((rs) => {
@@ -241,7 +257,7 @@ export default {
       }, (err) => { console.log(err) })
     },
     // 查看list
-    getListData () {
+    getData () {
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),
         mItemID: this.list.selectItemID,
@@ -272,7 +288,7 @@ export default {
     // 修改，编辑材料
     modify (index) {
       this.selectIndex = index
-      this.selectItemID = this.itemlist[this.selectIndex].mDevID
+      this.selectItemID = this.itemlist[this.selectIndex].mClID
       this.$store.commit('selectItemID', this.selectItemID)
       this.showModifyModal = true
     },
@@ -282,7 +298,7 @@ export default {
     },
     // 准备删除
     remove (index) {
-      this.delectItemDes = this.itemlist[index].mDevName
+      this.delectItemDes = this.itemlist[index].mClTypeName
       this.delectmodal = true
       this.selectIndex = index
     },

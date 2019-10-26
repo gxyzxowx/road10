@@ -35,16 +35,16 @@
       <FormItem label="设备电话卡号">
         <Input v-model.number="formValidate.mDevPhoneNo" placeholder="请输入设备电话卡号"></Input>
       </FormItem>
-      <FormItem label="温度预警标准" prop="mTempStandard">
+      <FormItem label="温度预警标准(℃)" prop="mTempStandard">
         <Input v-model="formValidate.mTempStandard" placeholder="请输入..."></Input>
       </FormItem>
-      <FormItem label="温度一级预警阈值" prop="mTempAL1Max">
+      <FormItem label="温度一级预警阈值(℃)" prop="mTempAL1Max">
         <Input v-model.number="formValidate.mTempAL1Max" placeholder="请输入..."></Input>
       </FormItem>
-      <FormItem label="温度二级预警阈值" prop="mTempAL2Max">
+      <FormItem label="温度二级预警阈值(℃)" prop="mTempAL2Max">
         <Input v-model="formValidate.mTempAL2Max" placeholder="请输入..."></Input>
       </FormItem>
-      <FormItem label="温度三级预警阈值" prop="mTempAL3Max">
+      <FormItem label="温度三级预警阈值(℃)" prop="mTempAL3Max">
         <Input v-model="formValidate.mTempAL3Max" placeholder="请输入..."></Input>
       </FormItem>
       <!-- 速度预警，只有摊铺机和碾压机要填 -->
@@ -189,7 +189,6 @@ export default {
         mItemID: this.formValidate.mItemID
       }
       this.comFun.post('/Item/getItemBid', obj, this).then((rs) => {
-        console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           let bdArr = []
           for (let num = rs.data.mItemBidSun; num > 0; num--) {
@@ -209,13 +208,15 @@ export default {
             // 1是编辑 ，需要添加mDevID
             obj['mDevID'] = this.selectItemID
           }
-          console.log(JSON.stringify(obj))
+          // console.log(JSON.stringify(obj))
           this.comFun.post('/Dev/createDev', obj, this).then((rs) => {
             console.log(JSON.stringify(rs))
+            console.log('操作设备成功')
+
             if (rs.code === 0) {
-              // 成功,提示后返回控制台
-              this.$Message.success('操作成功，请关闭该页并刷新查看')
-              return false
+              // 成功,提示后返回并刷新
+              this.$Message.success(rs.message)
+              this.$store.commit('setModalState', false)
             } else {
               //  失败
               this.$Message.error(rs.message)

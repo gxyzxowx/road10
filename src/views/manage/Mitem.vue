@@ -12,11 +12,12 @@
       margin: 20px 0;
     }
   }
+
 }
 </style>
 <template>
   <div class="mitem">
-    <div class="title">
+    <div class="title" ref="header">
       <div class="left">
         <Button type="success" size="large" icon="md-add" @click="createNewItem()">新建项目</Button>
       </div>
@@ -31,7 +32,7 @@
       </div>
     </div>
     <div class="bottom">
-      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" >
+      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" v-if="showTable" :width="width">
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: 5px" @click="importExcel(index)">导入</Button>
         <Button type="primary" size="small" style="margin-right: 5px" @click="modify(index)">修改</Button>
@@ -90,6 +91,7 @@ import ImportExcel from '@/components/ImportExcel.vue'
 export default {
   data () {
     return {
+      width: '1200',
       loading: true,
       modal_loading: false,
       page: {
@@ -98,7 +100,7 @@ export default {
         // 当前页数
         current: 1,
         // 每页条数
-        rows: 5
+        rows: 8
       },
       delectmodal: false,
       // 删除的索引
@@ -110,72 +112,90 @@ export default {
       showExcelModel: false,
       showNewProject: false,
       showModifyProject: false,
+      showTable: true,
       itemTitle: [
         {
           title: '项目描述',
-          key: 'mItemDes'
+          key: 'mItemDes',
+          width: 150,
+          fixed: 'left'
         },
         {
           title: '项目ID',
-          key: 'mItemID'
+          key: 'mItemID',
+          width: 80
         },
         {
           title: '标段数量',
-          key: 'mItemBidSun'
+          key: 'mItemBidSun',
+          width: 80
         },
         {
           title: '项目总长度',
-          key: 'mItemTotalLength'
+          key: 'mItemTotalLength',
+          width: 100
         },
         {
           title: '项目状态',
-          key: 'mItemActive'
+          key: 'mItemActive',
+          width: 80
         },
         {
           title: '项目负责人',
-          key: 'mItemAdmin'
+          key: 'mItemAdmin',
+          width: 100
         },
         {
           title: '项目联系电话',
-          key: 'mItemPhoneNo'
+          key: 'mItemPhoneNo',
+          width: 150
         },
         {
           title: '施工单位',
-          key: 'mItemSGUint'
+          key: 'mItemSGUint',
+          width: 100
         },
         {
           title: '监管单位',
-          key: 'mItemJGUint'
+          key: 'mItemJGUint',
+          width: 100
         },
         {
           title: '一级预警联系人',
-          key: 'mAlarmLev1Name'
+          key: 'mAlarmLev1Name',
+          width: 100
         },
         {
           title: '一级预警联系电话',
-          key: 'mAlarmLev1PhoneNo'
+          key: 'mAlarmLev1PhoneNo',
+          width: 150
         },
         {
           title: '二级预警联系人',
-          key: 'mAlarmLev2Name'
+          key: 'mAlarmLev2Name',
+          width: 100
         },
         {
           title: '二级预警联系电话',
-          key: 'mAlarmLev2PhoneNo'
+          key: 'mAlarmLev2PhoneNo',
+          width: 150
         },
         {
           title: '三级预警联系人',
-          key: 'mAlarmLev3Name'
+          key: 'mAlarmLev3Name',
+          width: 100
         },
         {
           title: '三级预警联系电话',
-          key: 'mAlarmLev3PhoneNo'
+          key: 'mAlarmLev3PhoneNo',
+          width: 100
         },
         {
           title: '操作',
           slot: 'action',
           width: 179,
-          align: 'center'
+          align: 'center',
+          fixed: 'right'
         }
       ],
       itemlist: [
@@ -206,14 +226,41 @@ export default {
         this.clearStoreSelectItemID()
       }
     },
+    // 监听到关闭时
     showModifyProject: function (newVal, oldVal) {
       if (!newVal) {
         this.clearStoreSelectItemID()
       }
+    },
+    storeModalState: function (newVal) {
+      console.log('监听到了模态框被关闭了')
+      if (newVal === false) {
+        // 模态框关闭
+        this.showNewProject = false
+        this.showModifyProject = false
+        // 重新刷新数据
+        this.getData()
+        // 重新展示数据
+        this.showTable = false
+        this.$nextTick(() => {
+          this.showTable = true
+        })
+        // 模态框状态归零
+        this.$store.commit('setModalState', '')
+      }
+    }
+  },
+  computed: {
+    // 监听模态框的状态
+    storeModalState: function () {
+      return this.$store.state.modalState
     }
   },
   mounted () {
     this.getData()
+    this.$nextTick(() => { // 页面渲染完成后的回调
+      this.width = this.$refs.header.offsetWidth
+    })
   },
   methods: {
     getData (search) {
@@ -286,6 +333,15 @@ export default {
     // 导入项目和修改项目关闭的时候情况store
     clearStoreSelectItemID () {
       this.$store.commit('selectItemID', '')
+    },
+    // emit消息后关闭页面
+    closeModal () {
+      console.log('监听到了')
+      this.showNewProject = false
+      this.showModifyProject = false
+      // this.$nextTick(() => {
+      // this.showView = true // DOM更新后再通过v-if添加router-view节点
+      // })
     }
   },
   components: {

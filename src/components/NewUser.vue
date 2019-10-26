@@ -128,12 +128,13 @@ export default {
             this.comFun.post('/User/addUser', obj, this).then((rs) => {
               console.log(JSON.stringify(rs))
               if (rs.code === 0) {
-                this.$Message.success('操作成功!请关闭该页并刷新查看。')
-              // 关闭该页并刷新
+                // 成功,提示后返回并刷新
+                console.log('修改或者新增用户成功')
+                this.$Message.success(rs.message)
+                this.$store.commit('setModalState', false)
               }
             }, (err) => { console.log(err) })
           } else {
-            console.log(132)
             // 1是修改
             let obj = {
               mUserID: this.comFun.getCookie('roadmUserID'),
@@ -145,7 +146,10 @@ export default {
             this.comFun.post('/User/editAdminInfo', obj, this).then((rs) => {
               console.log(JSON.stringify(rs))
               if (rs.code === 0) {
-                this.$Message.success('操作成功!请关闭该页并刷新查看。')
+                // 成功,提示后返回并刷新
+                console.log('修改或者新增用户成功')
+                this.$Message.success(rs.message)
+                this.$store.commit('setModalState', false)
               } else {
                 this.$Message.error(rs.message)
               }

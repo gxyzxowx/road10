@@ -36,7 +36,7 @@
       </div>
     </div>
     <div class="bottom">
-      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" >
+      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" v-if="showTable">
       <template slot-scope="{ row, index }" slot="action">
         <Button type="primary" size="small" style="margin-right: 5px" @click="modify(index)">修改</Button>
         <Button type="error" size="small" @click="remove(index)">删除</Button>
@@ -106,6 +106,7 @@ export default {
       delectItemDes: '',
       showNewModal: false,
       showModifyModal: false,
+      showTable: true,
       itemTitle: [
         {
           title: '用户ID',
@@ -151,6 +152,29 @@ export default {
       if (!newVal) {
         this.clearStoreselectItemID()
       }
+    },
+    // 监听模态框的状态
+    storeModalState: function (newVal) {
+      console.log('监听到关闭modal')
+      if (newVal === false) {
+        this.showNewModal = false
+        this.showModifyModal = false
+        // 重新刷新数据
+        this.getData()
+        // 重新展示数据
+        this.showTable = false
+        this.$nextTick(() => {
+          this.showTable = true
+        })
+        // 模态框状态归零
+        this.$store.commit('setModalState', '')
+      }
+    }
+  },
+  computed: {
+    // 监听模态框的状态
+    storeModalState: function () {
+      return this.$store.state.modalState
     }
   },
   mounted () {

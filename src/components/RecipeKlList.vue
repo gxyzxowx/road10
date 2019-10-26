@@ -14,7 +14,7 @@
 }
 </style>
 <template>
-<!-- 矿料列表 -->
+<!-- 某个材料的矿料列表 -->
   <div class="mitem">
     <div class="title">
 
@@ -30,7 +30,7 @@
         <Modal v-model="delectmodal" width="360">
           <p slot="header" style="color:#f60;text-align:center">
             <Icon type="ios-information-circle"></Icon>
-            <span>删除配方:{{delectItemDes}}</span>
+            <span>删除矿料:{{delectItemDes}}</span>
           </p>
           <div style="text-align:center">
             <p>删除后不可恢复</p>
@@ -75,8 +75,7 @@ export default {
       delectmodal: false,
       // 删除的索引
       selectIndex: null,
-      // 操作的设备id
-      selectmClID: '',
+
       delectItemDes: '',
       showNewModal: false,
       showModifyModal: false,
@@ -213,25 +212,38 @@ export default {
       if (!newVal) {
         this.clearStoreSelectItemID()
       }
+    },
+    // 监听模态框的状态
+    storeModalState: function (newVal) {
+      console.log('监听到关闭modal')
+      if (newVal === false) {
+        this.showNewModal = false
+        this.showModifyModal = false
+        // 重新刷新数据
+        this.getData()
+        // 重新展示数据
+        this.showTable = false
+        this.$nextTick(() => {
+          this.showTable = true
+        })
+        // 模态框状态归零
+        this.$store.commit('setModalStateKl', '')
+      }
     }
   },
   computed: {
+    // 监听模态框的状态
+    storeModalState: function () {
+      return this.$store.state.modalStateKl
+    }
   },
   mounted () {
     this.mClID = this.$store.state.selectItemID
-    this.getListData()
-
-    // let arr1 = []
-    // this.itemTitle.pop()
-    // this.itemTitle.map((item, index, arr) => {
-    //   // console.log(item)
-    //   arr1.push(item['key'])
-    // })
-    // console.log(JSON.stringify(arr1))
+    this.getData()
   },
   methods: {
     // 查看list
-    getListData () {
+    getData () {
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),
         mClID: this.mClID
@@ -239,12 +251,14 @@ export default {
       console.log(JSON.stringify(obj))
 
       this.comFun.post('/Cl/getBhClRepiceList', obj, this).then((rs) => {
-        // console.log(JSON.stringify(rs))
+        console.log(JSON.stringify(rs))
         if (rs.code === 0) {
+          if (!rs.data || rs.data.length === 0) return
           // 处理数据
+
           let titles = this.percentTitle
           rs.data.map((item, index, arr) => {
-          // 0:完结 1:工作中
+          // 所有的级配数据加上%
             for (let i = 0; i < titles.length; i++) {
               arr[index][titles[i]] = item[titles[i]] + '%'
             }
@@ -255,11 +269,14 @@ export default {
         }
       }, (err) => { console.log(err) })
     },
-    // 修改，编辑设备
+    // 修改，编辑矿料
     modify (index) {
       this.selectIndex = index
-      this.selectItemID = this.itemlist[this.selectIndex].mDevID
-      this.$store.commit('selectItemID', this.selectItemID)
+      this.selectItemID = this.itemlist[this.selectIndex].mKlID
+      // 把标段和项目ID,矿料ID存入store
+      this.$store.commit('setKlUsemKlID', this.selectItemID)
+      this.$store.commit('setKlUseItem', this.itemlist[0]['mItemID'])
+      this.$store.commit('setKlUseBd', this.itemlist[0]['mItemBid'])
       this.showModifyModal = true
     },
     // 新建设备
@@ -268,19 +285,21 @@ export default {
     },
     // 准备删除
     remove (index) {
-      this.delectItemDes = this.itemlist[index].mDevName
+      this.delectItemDes = this.itemlist[index].tBhKlTable
       this.delectmodal = true
       this.selectIndex = index
     },
     // 确认删除
     delItem () {
-      this.selectmClID = this.itemlist[this.selectIndex].mClID
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),
-        mItemID: this.list.selectItemID,
-        mClID: this.selectmClID
+        mItemID: this.itemlist[this.selectIndex].mItemID,
+        mItemBid: this.itemlist[this.selectIndex].mItemBid,
+        mClID: this.itemlist[this.selectIndex].mClID,
+        mKlID: this.itemlist[this.selectIndex].mKlID
       }
-      this.comFun.post('/Dev/userDeleteDev', obj, this).then((rs) => {
+      console.log(JSON.stringify(obj))
+      this.comFun.post('/Cl/delRepice', obj, this).then((rs) => {
         console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           this.modal_loading = true
@@ -288,14 +307,18 @@ export default {
             this.modal_loading = false
             this.delectmodal = false
             this.itemlist.splice(this.selectIndex, 1)
-            this.$Message.success('成功删除设备')
+            this.$Message.success('成功删除矿料')
           }, 1000)
+        } else {
+          this.$Message.error(rs.message)
         }
       }, (err) => { console.log(err) })
     },
-    // 导入项目和修改项目关闭的时候清空store
+    // 修改项目关闭的时候清空store
     clearStoreSelectItemID () {
-      this.$store.commit('selectItemID', '')
+      this.$store.commit('setKlUsemKlID', '')
+      this.$store.commit('setKlUseItem', '')
+      this.$store.commit('setKlUseBd', '')
     }
   },
   components: {
