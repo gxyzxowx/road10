@@ -10,10 +10,10 @@
   <h2 style="margin-bottom:10px;">{{type? '修改' : '新建'}}管理员</h2>
     <Form ref="formDynamic" :model="formDynamic" :label-width="120" style="width: 400px">
       <FormItem label="用户名" prop="mUserName">
-        <Input v-model="formDynamic.mUserName" placeholder="请输入新增的用户名"></Input>
+        <Input v-model="formDynamic.mUserName" placeholder="请输入新增的用户名" :disabled = disabled></Input>
       </FormItem>
       <FormItem label="密码" prop="mUserPwd">
-        <Input type="password" v-model.number="formDynamic.mUserPwd" placeholder="请输入用户名密码"></Input>
+        <Input type="password" v-model.number="formDynamic.mUserPwd" :placeholder="placeholder"></Input>
       </FormItem>
     <!-- 选择项目 -->
       <FormItem v-for="(item, index) in formDynamicItems"
@@ -52,7 +52,9 @@ export default {
       index: 1,
       // 0新增，1修改
       type: 0,
+      disabled: false,
       // 要修改的用户的ID
+      placeholder: '请输入新增用户的密码',
       selectItemID: '',
       selectlist: [],
       formDynamic: {
@@ -61,7 +63,7 @@ export default {
         items: [
           {
             value: '',
-            index: 1,
+            index: 0,
             status: 1
           }
         ]
@@ -69,14 +71,18 @@ export default {
     }
   },
   mounted () {
-    // 确定是修改项目还是新增项目
+    // 确定是修改用户还是新增项目
     this.selectItemID = this.$store.state.selectItemID
     if (this.selectItemID) {
-      // 编辑
+      // 是修改用户
       this.type = 1
       // console.log('是修改' + this.selectItemID)
       // 得到数据并陈列
       this.getUserData()
+      // 用户名变为不可修改
+      this.disabled = true
+      // 改变placeholder的字样
+      this.placeholder = '请输入需要修改的密码'
     }
     // 得到所有项目列表不分页
     this.getData()
@@ -90,6 +96,7 @@ export default {
     }
   },
   methods: {
+    // 修改状态下得到用户数据
     getUserData () {
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),
@@ -100,17 +107,25 @@ export default {
         if (rs.code === 0) {
           // 数据呈现
           this.formDynamic.mUserName = rs.data.mUserName
+          rs.data.itemList.map((item, index, arr) => {
+            this.formDynamic.items.unshift({
+              value: item['mItemID'],
+              index: index + 1,
+              status: 1
+            })
+          })
+          // this.formDynamic.items = rs.data.itemList
         }
       }, (err) => { console.log(err) })
     },
     handleSubmit (name) {
-      console.log(this.formDynamic)
+      console.log(JSON.stringify(this.formDynamic.items))
       this.$refs[name].validate((valid) => {
         if (valid) {
           let data = this.formDynamic
           let itemarr = []
           data.items.map((item, index, arr) => {
-            if (item.value) {
+            if (item.status && item.value) {
               itemarr.push(item.value)
             }
           })

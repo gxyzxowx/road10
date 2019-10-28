@@ -37,6 +37,13 @@
     </div>
     <div class="bottom">
       <Table border :columns="itemTitle" :data="itemlist" :loading="loading" v-if="showTable">
+      <template slot-scope="{ row, index }" slot="itemcols">
+        <div v-for="(item, index0) in row.userItem" style="display:flex;">
+
+          <div style="margin:0 10px;"><Icon type="ios-flag" />{{item.mItemDes}}</div>
+          <div style="color:#ccc;font-size:12px;"> （ ID:{{item.mItemID}} ）</div>
+          </div>
+      </template>
       <template slot-scope="{ row, index }" slot="action">
         <Button type="primary" size="small" style="margin-right: 5px" @click="modify(index)">修改</Button>
         <Button type="error" size="small" @click="remove(index)">删除</Button>
@@ -110,6 +117,7 @@ export default {
       itemTitle: [
         {
           title: '用户ID',
+          width: 80,
           key: 'mUserID'
         },
         {
@@ -121,12 +129,13 @@ export default {
           key: 'mUserLevel'
         },
         {
-          title: '有用项目数量',
+          title: '项目数量',
           key: 'num'
         },
         {
           title: '拥有项目',
-          key: 'itemIDs'
+          slot: 'itemcols',
+          width: 380
         },
         {
           title: '操作',
@@ -136,13 +145,6 @@ export default {
         }
       ],
       itemlist: [
-        {
-          'mUserID': 1,
-          'mUserName': 'pang',
-          'mUserLevel': 2,
-          'num': 1,
-          'itemIDs': [1, 2, 3]
-        }
       ]
     }
   },
@@ -191,21 +193,21 @@ export default {
         rows: this.page.rows,
         keywords: this.inputItem
       }
-      console.log(JSON.stringify(obj))
+      // console.log(JSON.stringify(obj))
       this.comFun.post('/User/getUserList', obj, this).then((rs) => {
         // console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           this.page.totaldata = rs.total
           rs.data.map((item, index, arr) => {
             arr[index].num = item.userItem.length
-            let ownitemsIDs = []
-            for (let i = 0; i < item.userItem.length; i++) {
-              ownitemsIDs.push(
-                '项目ID: ' + item.userItem[i].mItemID +
-                '，项目名:' + item.userItem[i].mItemDes
-              )
-            }
-            arr[index].itemIDs = JSON.stringify(ownitemsIDs)
+            // let ownitemsIDs = []
+            // for (let i = 0; i < item.userItem.length; i++) {
+            //   ownitemsIDs.push(
+            //     '项目ID: ' + item.userItem[i].mItemID +
+            //     '，项目名:' + item.userItem[i].mItemDes
+            //   )
+            // }
+            // arr[index].itemIDs = JSON.stringify(ownitemsIDs)
           })
           this.itemlist = rs.data
         }
@@ -213,7 +215,7 @@ export default {
     },
     // 修改，编辑用户
     modify (index) {
-      console.log(this.itemlist)
+      // console.log(this.itemlist)
       this.selectIndex = index
       this.selectItemID = this.itemlist[this.selectIndex].mUserID
       this.$store.commit('selectItemID', this.selectItemID)

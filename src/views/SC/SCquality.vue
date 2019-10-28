@@ -15,7 +15,10 @@
 <!-- 油石比曲线 -->
 <CurveChart :id="'curve2'" :data="dataCurve2" style="height:300px"></CurveChart>
       </div>
-      <div class="curve"></div>
+      <div class="curve">
+<!--级配曲线  -->
+<CurveChart :id="'curve3'" :data="dataCurve3" style="height:300px"></CurveChart>
+      </div>
     </div>
 
   </div>
@@ -27,7 +30,8 @@ export default {
   data () {
     return {
       dataCurve1: null,
-      dataCurve2: null
+      dataCurve2: null,
+      dataCurve3: null
     }
   },
   mounted () {
@@ -47,7 +51,7 @@ export default {
       obj = { ...obj, ...this.emitobj }
       console.log(JSON.stringify(obj))
       this.comFun.post('/Produce_J_G/productQuality', obj, this).then((rs) => {
-        console.log(JSON.stringify(rs))
+        // console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           // rs.data.map((item, index, arr) => {
           //   arr[index].mBhItemTemp = item.mBhItemTemp + '℃'
@@ -57,8 +61,57 @@ export default {
           this.dataCurve1 = this.handleCurveData(rs.data, 'mBhDateTime', 'mBhItemTemp', '℃', '出料温度曲线图')
           // 油石比曲线
           this.dataCurve2 = this.handleCurveData(rs.data, 'mBhDateTime', 'mBnYSB', '%', '油石比曲线图')
+          // 级配曲线9
+          this.dataCurve3 = this.handleCurveData2(rs.repice_data, '', '', '%', '级配曲线图')
         }
       }, (err) => { console.log(err) })
+    },
+    handleCurveData2 (data, time, val, Yname, title) {
+      let xAxisdata = []
+      let seriesdata = []
+
+      for (let item in data) {
+        let begIndex = item.indexOf('L') + 1
+        let endIndex = item.indexOf('Standard_req')
+        let str = item.slice(begIndex, endIndex)
+        let arr = str.split('')
+        arr.splice(2, 0, '.')
+        let reslut = arr.join('')
+        reslut = Number(reslut)
+        xAxisdata.push(reslut)
+        seriesdata.push(data[item])
+      }
+      let option = {
+        title: {
+          text: title,
+          textVerticalAlign: 'top'
+        },
+        color: ['#6996F3'],
+        grid: {
+          top: '15%',
+          left: '5%',
+          right: '10%',
+          bottom: '0%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          data: xAxisdata
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: '{value}' + Yname
+          },
+          splitLine: { show: true, lineStyle: { color: ['#ddd'] } } // 网格线
+        },
+        series: [{
+          data: seriesdata,
+          type: 'line',
+          smooth: true
+        }]
+      }
+      return option
     },
     // 处理曲线图
     handleCurveData (data, time, val, Yname, title) {
@@ -69,30 +122,6 @@ export default {
         seriesdata.push(data[i][val])
       }
       let option = {
-        // color: ['#6996F3'],
-        // textStyle: {
-        //   color: '#9FC9F7'
-        // },
-        // xAxis: {
-        //   type: 'category',
-        //   data: xAxisdata
-        // },
-        // yAxis: {
-        //   type: 'value',
-        //   splitLine: { show: true, lineStyle: { color: ['#333'] } } // 网格线
-        // },
-        // grid: {
-        //   top: '3%',
-        //   left: '3%',
-        //   right: '0',
-        //   bottom: '3%',
-        //   containLabel: true
-        // },
-        // series: [{
-        //   data: seriesdata,
-        //   type: 'line',
-        //   smooth: true
-        // }]
         title: {
           text: title,
           textVerticalAlign: 'top'

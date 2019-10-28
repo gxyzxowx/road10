@@ -155,7 +155,7 @@ export default {
           this.comFun.post('/Item/userCreateItem', obj, this).then((rs) => {
             console.log(rs)
             if (rs.code === 0) {
-              console.log('修改项目成功')
+              console.log('修改或者新增项目成功')
               // 成功,提示后返回并刷新
               this.$Message.success(rs.message)
               this.$store.commit('setModalState', false)
