@@ -99,7 +99,7 @@ router.beforeEach((to, from, next) => {
   // 取得用户数据
   let username = comFun.getCookie('roadmUserID')
   if (!username && to.path !== '/login') {
-    console.log('没有用户数据或者用户数据过期' + username)
+    // console.log('没有用户数据或者用户数据过期' + username)
     next('/login')
   } else if (to.name === 'control') {
     // console.log('有' + username)

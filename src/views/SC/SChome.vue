@@ -68,7 +68,7 @@ export default {
     getData (emitobj) {
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),
-        mItemID: this.$store.state.mItemID
+        mItemID: this.$store.state.itemInfo.id
       }
       // 有emitobj是子组件点击搜索的时候
       if (emitobj) {

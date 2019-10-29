@@ -5,6 +5,7 @@ import axios from 'axios'
 // import VueAxios from 'vue-axios'
 
 const BASE_URL = '/api'
+// const BASE_URL = 'http://test.weirong100.com/index.php/api'
 const obj = {
   // 用于取得cookie中的用户名
   getCookie (cname) {

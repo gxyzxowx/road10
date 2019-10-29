@@ -115,7 +115,7 @@ export default {
     getData (emitobj) {
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),
-        mItemID: this.$store.state.mItemID,
+        mItemID: this.$store.state.itemInfo.id,
         page: this.page.current,
         rows: this.page.rows
       }

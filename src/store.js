@@ -5,8 +5,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    mItemID: '',
-    mItemDes: '',
+    itemInfo: {
+      id: '',
+      des: ''
+    },
     selectItemID: '',
     equipUseItemID: '',
     klUse: {
@@ -19,9 +21,9 @@ export default new Vuex.Store({
     modalStateKl: ''
   },
   mutations: {
-    setItem (state, value) {
-      state.mItemID = value[0]
-      state.mItemDes = value[1]
+    // 下拉框选择项目时
+    setItem (state, obj) {
+      state.itemInfo = obj
     },
     // 可以是管理模块里面的项目ID，用户ID，设备ID，材料ID
     selectItemID (state, value) {
@@ -31,17 +33,9 @@ export default new Vuex.Store({
     equipUseItemID (state, value) {
       state.equipUseItemID = value
     },
-    // 新建、修改矿料时用的项目
-    setKlUseItem (state, value) {
-      state.klUse.itemID = value
-    },
-    // 新建、修改矿料时用的标段
-    setKlUseBd (state, value) {
-      state.klUse.bd = value
-    },
-    // 新建、修改矿料时用的矿料ID
-    setKlUsemKlID (state, value) {
-      state.klUse.mKlID = value
+    // 新建、修改矿料时用的项目,标段，矿料
+    setKlUse (state, obj) {
+      state.klUse = obj
     },
     // 关闭新建/修改的Modal
     setModalState (state, value) {

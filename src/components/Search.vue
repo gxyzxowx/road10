@@ -40,7 +40,7 @@ export default {
     // 得到标段列表
     let obj = {
       mUserID: this.comFun.getCookie('roadmUserID'),
-      mItemID: this.$store.state.mItemID
+      mItemID: this.$store.state.itemInfo.id
     }
     // console.log(JSON.stringify(obj))
     this.comFun.post('/Cl/getClTypeList', obj, this).then((rs) => {

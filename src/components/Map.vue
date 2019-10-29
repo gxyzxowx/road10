@@ -61,6 +61,7 @@ export default {
 
       // mDevGpsX纬度， mDevGpsY经度，mDevStatus0非工作中，mDevStatus1工作中
       mapData: [
+        // 拌和站209，碾压机211，摊铺机210
         {
           mDevGpsY: 109.4743093819,
           mDevGpsX: 24.5080777697,

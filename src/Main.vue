@@ -59,7 +59,7 @@
     }
     // 中间3个按钮
     .btns {
-      margin-top: 72px;
+      margin-top: 62px;
       display: flex;
       justify-content: space-around;
       .btn {
@@ -134,7 +134,7 @@
         <div class="mid">
           <!-- 下拉框和选择按钮3个 -->
           <div class="select">
-            <Select v-model="choseItem" style="margin-top:15px;" @on-change="choseItemFun(choseItem)">
+            <Select v-model="choseItem" style="margin-top:20px;" @on-change="choseItemFun(choseItem)">
               <Option
                 v-for="item in items"
                 :key="item.mItemID"
@@ -201,7 +201,11 @@ export default {
           // 取第一个复制给select,且存入vuex
           this.choseItem = rs.data[0].mItemID
           this.choseItemName = rs.data[0].ItemDes
-          let itemInfo = [this.choseItem, this.choseItemName]
+          let itemInfo = {
+            id: this.choseItem,
+            des: this.choseItemName
+          }
+          // [this.choseItem, this.choseItemName]
           this.$store.commit('setItem', itemInfo)
           return false
         } else {
@@ -234,7 +238,10 @@ export default {
 
       // 存入vuex
       setTimeout(() => {
-        let itemInfo = [this.choseItem, this.choseItemName]
+        let itemInfo = {
+          id: this.choseItem,
+          des: this.choseItemName
+        }
         this.$store.commit('setItem', itemInfo)
       }, 50)
 

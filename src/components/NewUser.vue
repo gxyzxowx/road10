@@ -147,6 +147,8 @@ export default {
                 console.log('修改或者新增用户成功')
                 this.$Message.success(rs.message)
                 this.$store.commit('setModalState', false)
+              } else {
+                this.$Message.error(rs.message)
               }
             }, (err) => { console.log(err) })
           } else {

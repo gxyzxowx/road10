@@ -200,8 +200,13 @@ export default {
       this.ifdisplayItem = true
     }
   },
+  computed: {
+    itemInfo () {
+      return this.$store.state.itemInfo.id
+    }
+  },
   watch: {
-    '$store.state.mItemID': function (newVal, oldVal) {
+    itemInfo: function (newVal, oldVal) {
       console.log('watch到了,项目' + oldVal + '变成：项目' + newVal)
       // 切换项目时得到项目详情
       this.displayItem()
@@ -211,8 +216,8 @@ export default {
   methods: {
     // 得到项目数据
     displayItem () {
-      this.itemId = this.$store.state.mItemID
-      this.itemName = this.$store.state.mItemDes
+      this.itemId = this.$store.state.itemInfo.id
+      this.itemName = this.$store.state.itemInfo.des
       // console.log('control刷新了，当前项目是：' + this.itemId)
       // 取得数据
       let obj = {

@@ -156,7 +156,7 @@ export default {
       }
     },
     // 监听模态框的状态
-    storeModalState: function (newVal) {
+    modalState: function (newVal) {
       console.log('监听到关闭modal')
       if (newVal === false) {
         this.showNewModal = false
@@ -175,7 +175,7 @@ export default {
   },
   computed: {
     // 监听模态框的状态
-    storeModalState: function () {
+    modalState: function () {
       return this.$store.state.modalState
     }
   },

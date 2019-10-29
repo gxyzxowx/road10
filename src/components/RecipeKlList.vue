@@ -274,9 +274,12 @@ export default {
       this.selectIndex = index
       this.selectItemID = this.itemlist[this.selectIndex].mKlID
       // 把标段和项目ID,矿料ID存入store
-      this.$store.commit('setKlUsemKlID', this.selectItemID)
-      this.$store.commit('setKlUseItem', this.itemlist[0]['mItemID'])
-      this.$store.commit('setKlUseBd', this.itemlist[0]['mItemBid'])
+      let KlUse = {
+        itemID: this.itemlist[0]['mItemID'],
+        bd: this.itemlist[0]['mItemBid'],
+        mKlID: this.selectItemID
+      }
+      this.$store.commit('setKlUse', KlUse)
       this.showModifyModal = true
     },
     // 新建设备
@@ -316,9 +319,7 @@ export default {
     },
     // 修改项目关闭的时候清空store
     clearStoreSelectItemID () {
-      this.$store.commit('setKlUsemKlID', '')
-      this.$store.commit('setKlUseItem', '')
-      this.$store.commit('setKlUseBd', '')
+      this.$store.commit('setKlUse', {})
     }
   },
   components: {
