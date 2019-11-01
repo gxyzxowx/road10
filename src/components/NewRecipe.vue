@@ -1,19 +1,22 @@
 <style scoped>
 .newform {
-  width: 800px;
-  height:900px;
-  margin: 50px auto;
+  width: 8rem;
+  height:9rem;
+  margin: .50rem auto;
   overflow-y: scroll;
 }
-
+.newform .select{
+  width:1.50rem;
+  margin-right:.10rem;
+}
 </style>
 <template>
 <!-- 新增/编辑材料 -->
   <div class="newform">
-    <h2 style="margin-bottom:10px;">{{type? '修改' : '新建'}}材料</h2>
+    <h2 style="margin-bottom: .10rem;">{{type? '修改' : '新建'}}材料</h2>
     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
       <FormItem label="材料类型" prop="mClType">
-        <Select v-model="formValidate.mClType" style="width:150px;margin-right:10px;" size="large" placeholder="请选择材料类型">
+        <Select v-model="formValidate.mClType" class="select" size="large" placeholder="请选择材料类型">
           <Option v-for="item in list.mClTypes" :value="item.mClTypeValue" :key="item.mClTypeValue">{{ item.mClTypeName }}</Option>
         </Select>
       </FormItem>
@@ -21,12 +24,12 @@
         <Input v-model.number="formValidate.mClName" placeholder="请输入"></Input>
       </FormItem>
       <FormItem label="所属项目" prop="mItemID">
-        <Select v-model="formValidate.mItemID" style="width:150px;margin-right:10px;" size="large" placeholder="请选择所属项目">
+        <Select v-model="formValidate.mItemID" class="select" size="large" placeholder="请选择所属项目">
           <Option v-for="item in list.items" :value="item.mItemID" :key="item.mItemID">{{ item.ItemDes }}</Option>
         </Select>
       </FormItem>
       <FormItem label="项目标段" prop="mItemBid">
-        <Select v-model="formValidate.mItemBid" style="width:150px;margin-right:10px;" size="large" placeholder="请选择所属项目的标段">
+        <Select v-model="formValidate.mItemBid" class="select" size="large" placeholder="请选择所属项目的标段">
           <Option v-for="item in list.mItemBids" :value="item" :key="item">{{ item }}</Option>
         </Select>
       </FormItem>
@@ -38,7 +41,7 @@
       </FormItem>
       <FormItem>
         <Button type="primary" @click="handleSubmit('formValidate')">确认{{type? '修改' : '新建'}}</Button>
-        <Button @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
+        <Button @click="handleReset('formValidate')" style="margin-left: .08rem">重置</Button>
       </FormItem>
     </Form>
     <Row>

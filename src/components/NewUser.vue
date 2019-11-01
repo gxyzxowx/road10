@@ -1,14 +1,14 @@
 <style lang="less" scoped>
   .newuser{
     .ivu-row{
-      height: 40px;
+      height: .40rem;
     }
   }
 </style>
 <template>
 <div class="newuser">
-  <h2 style="margin-bottom:10px;">{{type? '修改' : '新建'}}管理员</h2>
-    <Form ref="formDynamic" :model="formDynamic" :label-width="120" style="width: 400px">
+  <h2 style="margin-bottom: .10rem;">{{type? '修改' : '新建'}}管理员</h2>
+    <Form ref="formDynamic" :model="formDynamic" :label-width="120" style="width: 4rem">
       <FormItem label="用户名" prop="mUserName">
         <Input v-model="formDynamic.mUserName" placeholder="请输入新增的用户名" :disabled = disabled></Input>
       </FormItem>
@@ -22,7 +22,7 @@
               :prop="'items.' + index + '.value'">
           <Row>
               <Col span="18">
-                  <Select v-model="item.value" style="width:200px" placeholder="请选择项目">
+                  <Select v-model="item.value" style="width: 2rem" placeholder="请选择项目">
                     <Option v-for="option in selectlist" :value="option.mItemID" :key="option.mItemID">{{ option.ItemDes }}</Option>
                   </Select>
               </Col>
@@ -32,7 +32,7 @@
           </Row>
       </FormItem>
       <FormItem>
-          <Row  style="height:200px">
+          <Row  style="height: 2rem">
               <Col span="12">
                   <Button type="dashed" long @click="handleAdd" icon="md-add">加一项</Button>
               </Col>
@@ -40,7 +40,7 @@
       </FormItem>
       <FormItem>
           <Button type="primary" @click="handleSubmit('formDynamic')">提交</Button>
-          <Button @click="handleReset('formDynamic')" style="margin-left: 8px">重置</Button>
+          <Button @click="handleReset('formDynamic')" style="margin-left: .08rem">重置</Button>
       </FormItem>
   </Form>
 </div>

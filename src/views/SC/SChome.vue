@@ -1,13 +1,22 @@
 <style lang="less" scoped>
 .content{
-  margin-top: 30px;
+  margin-top: .30rem;
   .bar1{
-    margin-bottom: 25px;
+    margin-bottom: .25rem;
+  }
+  .top {
+    .chartbar {
+      height:2rem;
+    }
   }
   .bottom{
     display: flex;
     justify-content: space-between;
-    margin-top: 30px;
+    margin-top: .30rem;
+    .chartpie{
+      height:2.60rem;
+      width:3.50rem;
+    }
   }
 }
 </style>
@@ -18,18 +27,18 @@
     <div class="content">
       <div class="top">
         <div class="bar1">
-<BarChart :id="'bar1'" :data="dataBar1" style="height:200px"></BarChart>
+<BarChart :id="'bar1'" :data="dataBar1" class="chartbar"></BarChart>
         </div>
         <div class="bar2">
-<BarChart :id="'bar2'" :data="dataBar2" style="height:200px"></BarChart>
+<BarChart :id="'bar2'" :data="dataBar2" class="chartbar"></BarChart>
         </div>
 
       </div>
       <div class="bottom">
 
- <PieChart :id="'pie1'" :data="dataPie1" style="height:260px;width:350px"></PieChart>
- <PieChart :id="'pie2'" :data="dataPie2" style="height:260px;width:350px"></PieChart>
- <PieChart :id="'pie3'" :data="dataPie3" style="height:260px;width:350px"></PieChart>
+ <PieChart :id="'pie1'" :data="dataPie1" class="chartpie"></PieChart>
+ <PieChart :id="'pie2'" :data="dataPie2" class="chartpie"></PieChart>
+ <PieChart :id="'pie3'" :data="dataPie3" class="chartpie"></PieChart>
 
       </div>
     </div>

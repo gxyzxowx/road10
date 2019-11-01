@@ -1,6 +1,6 @@
 <style lang="less" scoped>
 .mitem {
-  margin: 15px;
+  margin: .15rem;
   .title {
     display: flex;
     justify-content: space-between;
@@ -8,7 +8,7 @@
       display: flex;
     }
     .right {
-      margin: 10px 0;
+      margin: .10rem 0;
     }
   }
 }
@@ -25,7 +25,7 @@
     <div class="bottom">
       <Table border :columns="itemTitle" :data="itemlist" no-data-text="暂无数据，请切换查看条件查看数据">
       <template slot-scope="{ row, index }" slot="action">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="modify(index)">修改</Button>
+        <Button type="primary" size="small" style="margin-right: .05rem" @click="modify(index)">修改</Button>
         <Button type="error" size="small" @click="remove(index)">删除</Button>
         <Modal v-model="delectmodal" width="360">
           <p slot="header" style="color:#f60;text-align:center">

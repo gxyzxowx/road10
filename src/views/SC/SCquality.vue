@@ -1,7 +1,11 @@
 <style scoped>
-  .curve{
-    margin-top: 30px;
+ .scquality .curve{
+    margin-top: .30rem;
   }
+  .scquality .curve .chart{
+    height:3rem;
+  }
+
 </style>
 <template>
   <div class="scquality">
@@ -9,15 +13,15 @@
     <div class="content">
       <div class="curve">
 <!-- 出料温度曲线 -->
-<CurveChart :id="'curve1'" :data="dataCurve1" style="height:300px"></CurveChart>
+<CurveChart :id="'curve1'" :data="dataCurve1" class = "chart"></CurveChart>
       </div>
       <div class="curve">
 <!-- 油石比曲线 -->
-<CurveChart :id="'curve2'" :data="dataCurve2" style="height:300px"></CurveChart>
+<CurveChart :id="'curve2'" :data="dataCurve2" class = "chart"></CurveChart>
       </div>
       <div class="curve">
 <!--级配曲线  -->
-<CurveChart :id="'curve3'" :data="dataCurve3" style="height:300px"></CurveChart>
+<CurveChart :id="'curve3'" :data="dataCurve3" class = "chart"></CurveChart>
       </div>
     </div>
 

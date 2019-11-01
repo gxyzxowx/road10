@@ -1,28 +1,31 @@
 <style scoped>
 .newform {
-  width: 800px;
-  height:900px;
-  margin: 50px auto;
+  width: 8rem;
+  height:9rem;
+  margin: .50rem auto;
   overflow-y: scroll;
 }
-
+.newform .select{
+  width:1.50rem;
+  margin-right:.10rem;
+}
 </style>
 <template>
   <div class="newform">
-    <h2 style="margin-bottom:10px;">{{type? '修改' : '新建'}}设备</h2>
+    <h2 style="margin-bottom: .10rem;">{{type? '修改' : '新建'}}设备</h2>
     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160">
       <FormItem label="选择项目" >
-        <Select v-model="formValidate.mItemID" style="width:150px;margin-right:10px;" size="large" placeholder="请选择项目">
+        <Select v-model="formValidate.mItemID" class="select" size="large" placeholder="请选择项目">
           <Option v-for="item in selectlist.items" :value="item.mItemID" :key="item.mItemID">{{ item.ItemDes }}</Option>
         </Select>
       </FormItem>
       <FormItem label="选择的项目标段" prop="mItemBid">
-        <Select v-model="formValidate.mItemBid" style="width:150px;margin-right:10px;" size="large" placeholder="请选择项目标段">
+        <Select v-model="formValidate.mItemBid" class="select" size="large" placeholder="请选择项目标段">
           <Option v-for="item in selectlist.mItemBid" :value="item" :key="item">{{ item }}</Option>
         </Select>
       </FormItem>
       <FormItem label="选择的设备类型">
-        <Select v-model="formValidate.mDevType" style="width:150px;margin-right:10px;" size="large" placeholder="请选择设备类型">
+        <Select v-model="formValidate.mDevType" class="select" size="large" placeholder="请选择设备类型">
           <Option v-for="item in selectlist.mDevType" :value="item.mDevType" :key="item.mDevType">{{ item.mDevTypeName }}</Option>
         </Select>
       </FormItem>
@@ -71,7 +74,7 @@
 
       <FormItem>
         <Button type="primary" @click="handleSubmit('formValidate')">确认{{type? '修改' : '新建'}}</Button>
-        <Button @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
+        <Button @click="handleReset('formValidate')" style="margin-left: .08rem">重置</Button>
       </FormItem>
     </Form>
     <Row>

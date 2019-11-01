@@ -1,15 +1,15 @@
 <style scoped>
 .newform {
-  width: 800px;
-  height:900px;
-  margin: 50px auto;
+  width: 8rem;
+  height:9rem;
+  margin: .50rem auto;
   overflow-y: scroll;
 }
 
 </style>
 <template>
   <div class="newform">
-    <h2 style="margin-bottom:10px;">{{type? '修改' : '新建'}}项目</h2>
+    <h2 style="margin-bottom: .10rem;">{{type? '修改' : '新建'}}项目</h2>
     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
       <FormItem label="项目描述" prop="mItemDes">
         <Input v-model="formValidate.mItemDes" placeholder="请输入您项目的名称"></Input>
@@ -59,7 +59,7 @@
 
       <FormItem>
         <Button type="primary" @click="handleSubmit('formValidate')">确认{{type? '修改' : '新建'}}</Button>
-        <Button @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
+        <Button @click="handleReset('formValidate')" style="margin-left: .08rem">重置</Button>
       </FormItem>
     </Form>
     <Row>

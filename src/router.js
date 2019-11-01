@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import comFun from './comfun.js'
+import comFun from './assets/js/comfun.js'
 // 定义组件
 
 Vue.use(Router)

@@ -1,18 +1,18 @@
 <style scoped>
 .newform {
-  width: 800px;
-  height:900px;
-  margin: 50px auto;
+  width: 8rem;
+  height:9rem;
+  margin: .50rem auto;
   overflow-y: scroll;
 }
 
 </style>
 <template>
   <div class="newform">
-    <h2 style="margin-bottom:10px;">{{type? '修改' : '新建'}}矿料</h2>
+    <h2 style="margin-bottom: .10rem;">{{type? '修改' : '新建'}}矿料</h2>
     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
       <FormItem label="选择矿料">
-        <Select v-model="formValidate.mKlID" style="width:180px;margin-right:10px;" size="large" placeholder="请选择矿料ID">
+        <Select v-model="formValidate.mKlID" style="width: 1.80rem;margin-right: .10rem;" size="large" placeholder="请选择矿料ID">
           <Option v-for="item in selectlist" :value="item.mKlID" :key="item.mKlID">{{ item.tBhKlTable }}</Option>
         </Select>
       </FormItem>
@@ -22,7 +22,7 @@
 
       <FormItem>
         <Button type="primary" @click="handleSubmit('formValidate')">确认{{type? '修改' : '新建'}}</Button>
-        <Button @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
+        <Button @click="handleReset('formValidate')" style="margin-left: .08rem">重置</Button>
       </FormItem>
     </Form>
     <Row>

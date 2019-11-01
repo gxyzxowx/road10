@@ -9,7 +9,9 @@ import './assets/css/style.css'
 // import VueAxios from 'vue-axios'
 
 // 全局引用公共函数
-import comFun from './comfun.js'
+import comFun from './assets/js/comfun.js'
+// 全局引入rem
+import './assets/js/rem.js'
 
 // Vue.use(VueAxios, axios)
 // Vue.prototype.$ajax = axios

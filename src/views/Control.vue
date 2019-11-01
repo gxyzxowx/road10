@@ -1,10 +1,10 @@
 <style lang="less" scoped>
 .control {
-  margin: 0 40px;
+  margin: 0 .40rem;
   display: flex;
   .left,
   .right {
-    width: 430px;
+    width: 4.30rem;
     height: 100%;
   }
   .left{
@@ -12,8 +12,8 @@
       .content{
         .body{
           .name{
-            font-size: 13px;
-            margin-bottom: 12px;
+            font-size: .13rem;
+            margin-bottom: .12rem;
             span{
               color:#FEAB67;
             }
@@ -24,49 +24,55 @@
   }
   .mid {
     flex: 1;
-    margin: 0 15px;
+    margin: 0 .15rem;
+    .map{
+      height:8.10rem;
+    }
   }
   .col {
     position: relative;
-    width: 430px;
-    height: 260px;
+    width: 4.30rem;
+    height: 2.60rem;
     box-sizing: border-box;
-    padding:19px 20px;
-    border: 2px solid rgba(32, 64, 129, .71);
-    box-shadow: 0px 0px 30px rgb(54, 100, 134) inset;
-    margin-bottom: 15px;
+    padding:.19rem .20rem;
+    border: 0.02rem solid rgba(32, 64, 129, .71);
+    box-shadow: 0rem 0rem .30rem rgb(54, 100, 134) inset;
+    margin-bottom: .15rem;
     .content{
        color:#9FC9F7;
         .title{
-          margin-bottom: 18px;
-          font-size: 16px;
+          margin-bottom: .18rem;
+          font-size: .16rem;
+        }
+        .chart {
+          height:1.80rem;
         }
     }
     .L{
       position: absolute;
       background-size: 100% 100%;
-      width: 20px;
-      height: 20px;
+      width: .20rem;
+      height: .20rem;
     }
     .L:nth-child(1){
       background-image: url(~@/assets/img/top-left.png);
-      top:-4px;
-      left: -4px
+      top:-.04rem;
+      left: -.04rem
     }
     .L:nth-child(2){
       background-image: url(~@/assets/img/top-right.png);
-      top:-4px;
-      right: -4px;
+      top:-.04rem;
+      right: -.04rem;
     }
     .L:nth-child(3){
       background-image: url(~@/assets/img/bot-left.png);
-      bottom: -4px;
-      left: -4px;
+      bottom: -.04rem;
+      left: -.04rem;
     }
     .L:nth-child(4){
       background-image: url(~@/assets/img/bot-rig.png);
-      bottom:-4px;
-      right: -4px;
+      bottom:-.04rem;
+      right: -.04rem;
     }
 
   }
@@ -106,7 +112,7 @@
         </div>
         <div class="content">
           <div class="title">预警按类型分类统计</div>
-          <PieChart :id="'pie1'" :data="dataPie1" style="height:180px"></PieChart>
+          <PieChart :id="'pie1'" :data="dataPie1" class = "chart"></PieChart>
         </div>
 
       </div>
@@ -119,12 +125,12 @@
         </div>
         <div class="content">
           <div class="title">预警按预警级别分类统计</div>
-          <PieChart :id="'pie2'" :data="dataPie2" style="height:180px"></PieChart>
+          <PieChart :id="'pie2'" :data="dataPie2" class = "chart"></PieChart>
         </div>
       </div>
     </div>
     <div class="mid">
-      <Map style="height:810px;" :data="datas.DevData"></Map>
+      <Map class="map" :data="datas.DevData"></Map>
     </div>
     <div class="right">
       <div class="columnar col">
@@ -136,7 +142,7 @@
         </div>
         <div class="content">
           <div class="title">拌合站产量统计</div>
-          <BarChart :id="'bar1'" :data="dataBar1" style="height:180px"></BarChart>
+          <BarChart :id="'bar1'" :data="dataBar1" class = "chart"></BarChart>
         </div>
       </div>
       <div class="curve col">
@@ -148,7 +154,7 @@
         </div>
         <div class="content">
           <div class="title">每日生产总量统计</div>
-          <CurveChart :id="'curve1'" :data="dataCurve1" style="height:180px"></CurveChart>
+          <CurveChart :id="'curve1'" :data="dataCurve1" class = "chart"></CurveChart>
         </div>
       </div>
       <div class="columnar col">
@@ -160,7 +166,7 @@
         </div>
         <div class="content">
           <div class="title">摊铺和碾压里程统计</div>
-          <CurveChart :id="'bar2'" :data="dataBar2" style="height:180px"></CurveChart>
+          <CurveChart :id="'bar2'" :data="dataBar2" class = "chart"></CurveChart>
         </div>
       </div>
     </div>

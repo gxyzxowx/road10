@@ -1,19 +1,34 @@
-<style>
-
+<style scoped>
+    .box{
+        margin: .20rem 0;
+    }
+    .item{
+        display: flex;
+        justify-content: space-between;
+        align-items:center;
+    }
+    .item:first-child{
+        margin-bottom: .20rem;
+    }
+  .login .card{
+  width:3.20rem;
+  height:2.50rem;
+  margin: 1.50rem auto;
+  }
 </style>
 <template>
-    <div>
+    <div class="login">
         <!-- <div class="mclas">login我是登录大页面</div> -->
     <Row>
         <Col>
-            <Card style="width:320px;height:250px;margin: 150px auto">
+            <Card class="card">
                 <p slot="title">欢迎登陆道路管控系统</p>
                 <div class="box">
                     <div class="item">
-                        <span>用户名：</span><Input v-model="username" placeholder="Enter something..." clearable style="width: 200px" />
+                        <span>用户名：</span><Input v-model="username" placeholder="Enter something..." clearable style="width: 2rem" />
                     </div>
                     <div class="item">
-                        <span>密码：</span><Input type="password" v-model="password" placeholder="Enter something..." clearable style="width: 200px" />
+                        <span>密码：</span><Input type="password" v-model="password" placeholder="Enter something..." clearable style="width: 2rem" />
                     </div>
                 </div>
                 <Button type="primary" long @click="login()">登陆</Button>
@@ -83,16 +98,3 @@ export default {
 
 }
 </script>
-<style lang="scss" scoped>
-    .box{
-        margin: 20px 0;
-    }
-    .item{
-        display: flex;
-        justify-content: space-between;
-        align-items:center;
-    }
-    .item:first-child{
-        margin-bottom: 20px;
-    }
-</style>

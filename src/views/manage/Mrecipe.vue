@@ -1,6 +1,6 @@
 <style lang="less" scoped>
 .mitem {
-  margin: 15px;
+  margin: .15rem;
   .title {
     display: flex;
     justify-content: space-between;
@@ -9,7 +9,7 @@
     }
     .left,
     .right {
-      margin: 20px 0;
+      margin: .20rem 0;
     }
   }
 }
@@ -18,10 +18,10 @@
   <div class="mitem">
     <div class="title">
       <div class="left">
-        <Select v-model="list.selectItemID" style="width:150px;margin-right:10px;" size="large" placeholder="请选择项目">
+        <Select v-model="list.selectItemID" style="width:1.50rem;margin-right:.10rem;" size="large" placeholder="请选择项目">
         <Option v-for="item in list.items" :value="item.mItemID" :key="item.mItemID">{{ item.ItemDes }}</Option>
     </Select>
-    <Select v-model="list.selectmItemBid" style="width:150px;margin-right:15px;" size="large" placeholder="请选择标段">
+    <Select v-model="list.selectmItemBid" style="width:1.50rem;margin-right:.15rem;" size="large" placeholder="请选择标段">
         <Option v-for="item in list.mItemBids" :value="item" :key="item">{{ item }}</Option>
     </Select>
     <Button type="primary" size="large" icon="ios-search" v-on:click="getData()">查看材料</Button>
@@ -30,18 +30,18 @@
         <Input
           v-model="inputItem"
           size="large"
-          style="margin-right:15px;"
+          style="margin-right:.15rem;"
           placeholder="请输入搜索的配方名称"
         />
-        <Button type="primary" size="large" icon="ios-search" style="margin-right:15px;" v-on:click="getData()">搜索材料</Button>
+        <Button type="primary" size="large" icon="ios-search" style="margin-right:.15rem;" v-on:click="getData()">搜索材料</Button>
         <Button type="success" size="large" icon="md-add" @click="createNewItem()">新建材料</Button>
       </div>
     </div>
     <div class="bottom">
       <Table border :columns="itemTitle" :data="itemlist" :loading="loading" no-data-text="暂无数据，请切换查看条件查看数据" v-if="showTable">
       <template slot-scope="{ row, index }" slot="action">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="more(index)">操作矿料</Button>
-        <Button type="primary" size="small" style="margin-right: 5px" @click="modify(index)">修改</Button>
+        <Button type="primary" size="small" style="margin-right: .05rem" @click="more(index)">操作矿料</Button>
+        <Button type="primary" size="small" style="margin-right: .05rem" @click="modify(index)">修改</Button>
         <Button type="error" size="small" @click="remove(index)">删除</Button>
         <Modal v-model="delectmodal" width="360">
           <p slot="header" style="color:#f60;text-align:center">
@@ -59,7 +59,7 @@
       </template>
     </Table>
     <Switch v-model="loading"></Switch>
-      <div style="margin: 10px;overflow: hidden">
+      <div style="margin: .10rem;overflow: hidden">
         <div style="float: right;">
             <Page :total="page.totaldata" :current.sync="page.current" :page-size="page.rows" @on-change="changePage"></Page>
         </div>

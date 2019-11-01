@@ -2,34 +2,34 @@
 .colmap {
   background: #050926;
   position: relative;
-  border: 2px solid rgba(32, 64, 129, 0.71);
-  box-shadow: 0px 0px 30px rgb(54, 100, 134) inset;
+  border: .02rem solid rgba(32, 64, 129, 0.71);
+  box-shadow: 0rem 0rem .30rem rgb(54, 100, 134) inset;
 }
 .L {
   position: absolute;
   background-size: 100% 100%;
-  width: 20px;
-  height: 20px;
+  width: .20rem;
+  height: .20rem;
 }
 .L:nth-child(1) {
   background-image: url(~@/assets/img/top-left.png);
-  top: -4px;
-  left: -4px;
+  top: -.04rem;
+  left: -.04rem;
 }
 .L:nth-child(2) {
   background-image: url(~@/assets/img/top-right.png);
-  top: -4px;
-  right: -4px;
+  top: -.04rem;
+  right: -.04rem;
 }
 .L:nth-child(3) {
   background-image: url(~@/assets/img/bot-left.png);
-  bottom: -4px;
-  left: -4px;
+  bottom: -.04rem;
+  left: -.04rem;
 }
 .L:nth-child(4) {
   background-image: url(~@/assets/img/bot-rig.png);
-  bottom: -4px;
-  right: -4px;
+  bottom: -.04rem;
+  right: -.04rem;
 }
 .ec-extension-bmap{
   background:#050926 !important;

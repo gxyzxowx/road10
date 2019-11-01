@@ -1,9 +1,13 @@
 <style scoped>
   .top{
-    margin-top: 40px;
-    margin-bottom: 30px;
+    margin-top: .40rem;
+    margin-bottom: .30rem;
     display:flex;
     justify-content: space-around;
+  }
+  .top .chart{
+    height:2.50rem;
+    width:3rem;
   }
 </style>
 <template>
@@ -13,11 +17,11 @@
   <div class="top">
     <div class="left">
       <!-- <div class="title">预警按类型分类统计</div> -->
-          <PieChart :id="'pie1'" :data="dataPie1" style="height:250px;width:300px"></PieChart>
+          <PieChart :id="'pie1'" :data="dataPie1" class = "chart"></PieChart>
     </div>
     <div class="right">
       <!-- <div class="title">预警按预警级别分类统计</div> -->
-          <PieChart :id="'pie2'" :data="dataPie2" style="height:250px;width:300px"></PieChart>
+          <PieChart :id="'pie2'" :data="dataPie2" class = "chart"></PieChart>
     </div>
   </div>
   <div class="bottom">

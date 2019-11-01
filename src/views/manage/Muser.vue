@@ -5,7 +5,7 @@
 </template>
 <style lang="less" scoped>
 .mitem {
-  margin: 15px;
+  margin: .15rem;
   .title {
     display: flex;
     justify-content: space-between;
@@ -14,7 +14,7 @@
     }
     .left,
     .right {
-      margin: 20px 0;
+      margin: .20rem 0;
     }
   }
 }
@@ -29,7 +29,7 @@
         <Input
           v-model="inputItem"
           size="large"
-          style="margin-right:15px;"
+          style="margin-right:.15rem;"
           placeholder="请输入搜索的用户名"
         />
         <Button type="primary" size="large" icon="ios-search" v-on:click="getData(true)">搜索管理员</Button>
@@ -40,12 +40,12 @@
       <template slot-scope="{ row, index }" slot="itemcols">
         <div v-for="(item, index0) in row.userItem" style="display:flex;">
 
-          <div style="margin:0 10px;"><Icon type="ios-flag" />{{item.mItemDes}}</div>
-          <div style="color:#ccc;font-size:12px;"> （ ID:{{item.mItemID}} ）</div>
+          <div style="margin:0 .10rem;"><Icon type="ios-flag" />{{item.mItemDes}}</div>
+          <div style="color:#ccc;font-size:.12rem;"> （ ID:{{item.mItemID}} ）</div>
           </div>
       </template>
       <template slot-scope="{ row, index }" slot="action">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="modify(index)">修改</Button>
+        <Button type="primary" size="small" style="margin-right: .05rem" @click="modify(index)">修改</Button>
         <Button type="error" size="small" @click="remove(index)">删除</Button>
         <Modal v-model="delectmodal" width="360">
           <p slot="header" style="color:#f60;text-align:center">
@@ -63,7 +63,7 @@
       </template>
     </Table>
     <Switch v-model="loading"></Switch>
-      <div style="margin: 10px;overflow: hidden">
+      <div style="margin: .10rem;overflow: hidden">
         <div style="float: right;">
             <Page :total="page.totaldata" :current.sync="page.current" :page-size="page.rows" @on-change="changePage"></Page>
         </div>

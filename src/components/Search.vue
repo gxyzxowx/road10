@@ -1,14 +1,21 @@
+<style lang="less" scoped>
+  .title .selects{
+    .box {
+      width: 2rem;
+    }
+  }
+</style>
 <template>
   <div class="title">
     <div class="selects">
-        <Select v-model="select.mClTypeValue" style="width:200px" placeholder="材料类型">
+        <Select v-model="select.mClTypeValue" class="box" placeholder="材料类型">
           <Option v-for="item in show.mClTypeValueList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
-        <Select v-model="select.mItemBid" style="width:200px" placeholder="工程标段">
+        <Select v-model="select.mItemBid" class="box" placeholder="工程标段">
           <Option v-for="item in show.mItemBidList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
-        <DatePicker type="date" placeholder="开始时间" style="width: 200px" v-model="select.start_time" @on-change="changeType0"></DatePicker>
-        <DatePicker type="date" placeholder="结束时间" style="width: 200px" v-model="select.end_time" @on-change="changeType1"></DatePicker>
+        <DatePicker type="date" placeholder="开始时间" class="box" v-model="select.start_time" @on-change="changeType0"></DatePicker>
+        <DatePicker type="date" placeholder="结束时间" class="box" v-model="select.end_time" @on-change="changeType1"></DatePicker>
       </div>
       <div class="btn" @click="getData()">
         <span>

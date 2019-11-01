@@ -1,15 +1,18 @@
 <style scoped>
 .content{
-   margin-top: 30px;
+   margin-top: .30rem;
 }
 .bar1{
-    margin-bottom: 25px;
+    margin-bottom: .25rem;
   }
   .scdata .content .title{
-    margin-top: 40px;
-    margin-bottom: 20px;
-    font-size: 17px;
+    margin-top: .40rem;
+    margin-bottom: .20rem;
+    font-size: .17rem;
     font-weight: 700;
+  }
+  .scdata .content .top .chart{
+    height:2rem;
   }
 </style>
 <template>
@@ -18,10 +21,10 @@
     <div class="content">
       <div class="top">
          <div class="bar1">
-<BarChart :id="'bar1'" :data="dataBar1" style="height:200px"></BarChart>
+<BarChart :id="'bar1'" :data="dataBar1" class = "chart"></BarChart>
         </div>
         <div class="bar2">
-<BarChart :id="'bar2'" :data="dataBar2" style="height:200px"></BarChart>
+<BarChart :id="'bar2'" :data="dataBar2" class = "chart"></BarChart>
         </div>
       </div>
       <div class="bottom">
@@ -29,7 +32,7 @@
 <div class="title">产量列表</div>
 <Table :loading="loading" height="300" border :columns="listTitle" :data="datalist"></Table>
 <Switch v-model="loading"></Switch>
-<div style="margin: 10px;overflow: hidden">
+<div style="margin: .10rem;overflow: hidden">
         <div style="float: right;">
             <Page :total="page.totaldata"  :page-size="page.rows" :current.sync="page.current" @on-change="changePage"></Page>
         </div>

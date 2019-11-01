@@ -1,6 +1,6 @@
 <style lang="less" scoped>
 .mitem {
-  margin: 15px;
+  margin: .15rem;
   .title {
     display: flex;
     justify-content: space-between;
@@ -9,7 +9,7 @@
     }
     .left,
     .right {
-      margin: 20px 0;
+      margin: .20rem 0;
     }
   }
 
@@ -25,7 +25,7 @@
         <Input
           v-model="inputItem"
           size="large"
-          style="margin-right:15px;"
+          style="margin-right:.15rem;"
           placeholder="请输入搜索的项目名称"
         />
         <Button type="primary" size="large" icon="ios-search" v-on:click="getData(true)">搜索项目</Button>
@@ -34,8 +34,8 @@
     <div class="bottom">
       <Table border :columns="itemTitle" :data="itemlist" :loading="loading" v-if="showTable" :width="width">
       <template slot-scope="{ row, index }" slot="action">
-        <Button type="success" size="small" style="margin-right: 5px" @click="importExcel(index)">导入</Button>
-        <Button type="primary" size="small" style="margin-right: 5px" @click="modify(index)">修改</Button>
+        <Button type="success" size="small" style="margin-right: .05rem" @click="importExcel(index)">导入</Button>
+        <Button type="primary" size="small" style="margin-right: .05rem" @click="modify(index)">修改</Button>
         <Button type="error" size="small" @click="remove(index)">删除</Button>
         <Modal v-model="delectmodal" width="360">
           <p slot="header" style="color:#f60;text-align:center">
@@ -53,7 +53,7 @@
       </template>
     </Table>
     <Switch v-model="loading"></Switch>
-      <div style="margin: 10px;overflow: hidden">
+      <div style="margin: .10rem;overflow: hidden">
         <div style="float: right;">
             <Page :total="page.totaldata" :current.sync="page.current" :page-size="page.rows" @on-change="changePage"></Page>
         </div>

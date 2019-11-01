@@ -1,9 +1,9 @@
 <style scoped>
   .content{
-    margin-top: 30px;
+    margin-top: .30rem;
   }
   .table{
-    width: 1200px;
+    width: 12rem;
     overflow: hidden;
   }
   .tableinner{
@@ -24,7 +24,7 @@
           </div>
 
 <Switch v-model="loading"></Switch>
-<div style="margin: 10px;overflow: hidden">
+<div style="margin: .10rem;overflow: hidden">
         <div style="float: right;">
             <Page :total="page.totaldata" :current.sync="page.current" :page-size="page.rows" @on-change="changePage"></Page>
         </div>

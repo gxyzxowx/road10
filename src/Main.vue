@@ -2,11 +2,11 @@
 </style>
 <style scoped lang="less">
 .layout .header {
-  height: 215px;
+  height: 2.15rem;
   background-image: url(~@/assets/img/top.png);
   background-repeat: no-repeat;
   background-position: top center;
-  background-size: 1920px 85px;
+  background-size: 19.20rem .85rem;
 }
 .control-body {
   height: 100%;
@@ -15,65 +15,64 @@
   display: flex;
   justify-content: space-between;
   .time {
-    width: 470px;
-    margin-top: 80px;
+    width: 4.70rem;
+    margin-top: .80rem;
     span{
-      padding:6px 14px;
-      font-size:18px;
+      padding:.06rem .14rem;
+      font-size:.18rem;
       font-family:Source Han Sans CN;
       font-weight:400;
       color: rgba(255,255,255,.71);
-      line-height:41px;
-      margin-left: 130px;
-      height:41px;
+      line-height:.41rem;
+      margin-left: 1.30rem;
+      height:.41rem;
       background:rgba(24,56,98,1);
-      border:1px solid rgba(32, 64, 129, 1);
-      border-radius:21px;
+      border:.01rem solid rgba(32, 64, 129, 1);
+      border-radius:.21rem;
     }
   }
   .mid {
     flex:1;
     .select {
       position: relative;
-      margin:0 150px;
+      margin:0 1.50rem;
       .beautiful {
-        padding: 10px 20px;
+        padding: .10rem .20rem;
         position: absolute;
         width: 100%;
-        top: 5px;
+        top: .05rem;
         text-align: center;
         background: #122a4e;
         pointer-events: none;
         span {
 
-          font-size: 36px;
+          font-size: .36rem;
           color:#E5F5FF;
           background-image: -webkit-linear-gradient(bottom, #93C2F5,  #E5F5FF);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 700;
-        // text-shadow: 1px 1px 1px #666, 3px 3px 8px black;
         }
 
       }
     }
     // 中间3个按钮
     .btns {
-      margin-top: 62px;
+      margin-top: .62rem;
       display: flex;
       justify-content: space-around;
       .btn {
         cursor: pointer;
-        width:263px;
-        height:73px;
+        width:2.63rem;
+        height:.73rem;
         background:linear-gradient(to right,rgba(54,94,165,0),rgba(34,136,214,.7),rgba(54,94,165,0));
-        border:2px solid rgba(15, 93, 155, .71);
+        border:.02rem solid rgba(15, 93, 155, .71);
         .texts{
-          margin-top: 10px;
+          margin-top: .10rem;
           text-align: center;
           span{
             font-family: "Hiragino Sans GB";
-            font-size:36px;
+            font-size:.36rem;
             font-weight:500;
             background:linear-gradient(0deg,rgba(229,245,255,1) 0%, rgba(147,194,245,1) 100%);
             -webkit-background-clip:text;
@@ -82,9 +81,9 @@
           }
           img{
             vertical-align:middle;
-            width: 48px;
-            height: 48px;
-            margin-right: 6px;
+            width: .48rem;
+            height: .48rem;
+            margin-right: .06rem;
           }
         }
       }
@@ -94,32 +93,32 @@
     }
   }
   .right {
-     width: 470px;
+     width: 4.70rem;
      box-sizing: border-box;
-     padding: 0 100px;
-     margin-top: 80px;
+     padding: 0 1.00rem;
+     margin-top: .80rem;
 
     display: flex;
     justify-content: space-around;
     .exit,.manage{
-      padding:8px 12px;
+      padding:.08rem .12rem;
       text-align: center;
-      height:41px;
+      height:.41rem;
       background:rgba(24,56,97,1);
-      border:1px solid rgba(32, 64, 129, 1);
-      border-radius:21px;
+      border:.01rem solid rgba(32, 64, 129, 1);
+      border-radius:.21rem;
       cursor: pointer;
     }
     .texts{
       img{
-        width: 20px;
-        height: 20px;
-        margin-right: 5px;
+        width: .20rem;
+        height: .20rem;
+        margin-right: .05rem;
          vertical-align:middle;
       }
       span{
         color:rgba(255,255,255,.71);
-        font-size: 19px;
+        font-size: .19rem;
          vertical-align:middle;
       }
     }
@@ -134,7 +133,7 @@
         <div class="mid">
           <!-- 下拉框和选择按钮3个 -->
           <div class="select">
-            <Select v-model="choseItem" style="margin-top:20px;" @on-change="choseItemFun(choseItem)">
+            <Select v-model="choseItem" style="margin-top:.20rem;" @on-change="choseItemFun(choseItem)">
               <Option
                 v-for="item in items"
                 :key="item.mItemID"
