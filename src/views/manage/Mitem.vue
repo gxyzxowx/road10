@@ -82,6 +82,7 @@
             <span>修改项目</span>
         </p>
         <NewProject v-if="showModifyProject"></NewProject>
+        <div slot="footer"></div>
     </Modal>
   </div>
 </template>

@@ -87,10 +87,10 @@
             <Icon type="md-add"></Icon>
             <span>查看更多</span>
         </p>
-        <Table v-if="showMoreModel" :columns="moreitemTitle" :data="moreitemlist"></Table>
+        <Table v-if="showMoreModel" :columns="moreitemTitle" :data="moreitemlist" height=700></Table>
         <div slot="footer"></div>
     </Modal>
-    <!-- 新建项目模态框 -->
+    <!-- 新建设备模态框 -->
     <Modal v-model="showNewModal" width="900">
         <p slot="header" style="color:#333;text-align:center">
             <Icon type="md-add"></Icon>
@@ -99,13 +99,14 @@
         <NewEquip v-if="showNewModal"></NewEquip>
         <div slot="footer"></div>
     </Modal>
-    <!-- 修改项目模态框 -->
-       <Modal v-model="showModifyModal" width="900" >
+    <!-- 修改设备模态框 -->
+       <Modal v-model="showModifyModal" width="900">
         <p slot="header" style="color:#333;text-align:center">
             <Icon type="md-add"></Icon>
             <span>修改设备</span>
         </p>
         <NewEquip v-if="showModifyModal"></NewEquip>
+        <div slot="footer"></div>
     </Modal>
   </div>
 </template>
@@ -254,6 +255,9 @@ export default {
     }
   },
   mounted () {
+    // 一打开呈现所有项目
+    this.getData()
+    // 得到选项的选择项
     this.getSelectData()
   },
   methods: {
@@ -297,6 +301,10 @@ export default {
         // console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           this.list.items = rs.data
+          // 加一个全部
+          this.list.items.push({
+            'mItemID': '', 'ItemDes': '全部', 'mItemBidSun': '全部', 'mItemJGUint': ''
+          })
         }
       }, (err) => { console.log(err) })
       // 得到所有设备类型

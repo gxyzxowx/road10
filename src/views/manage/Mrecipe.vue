@@ -40,7 +40,7 @@
     <div class="bottom">
       <Table border :columns="itemTitle" :data="itemlist" :loading="loading" no-data-text="暂无数据，请切换查看条件查看数据" v-if="showTable">
       <template slot-scope="{ row, index }" slot="action">
-        <Button type="primary" size="small" style="margin-right: .05rem" @click="more(index)">操作矿料</Button>
+        <Button type="primary" size="small" style="margin-right: .05rem" @click="more(index)">级配</Button>
         <Button type="primary" size="small" style="margin-right: .05rem" @click="modify(index)">修改</Button>
         <Button type="error" size="small" @click="remove(index)">删除</Button>
         <Modal v-model="delectmodal" width="360">
@@ -91,6 +91,7 @@
             <span>修改材料</span>
         </p>
         <NewRecipe v-if="showModifyModal"></NewRecipe>
+        <div slot="footer"></div>
     </Modal>
   </div>
 </template>
@@ -192,7 +193,11 @@ export default {
       }
     },
     // this.list.selectItemID
-    computedmItemID: function getBd () {
+    computedmItemID: function getBd (newVal) {
+      if (newVal === '') {
+        this.list.mItemBids = []
+        return
+      }
       this.getCurrentBd()
     },
     // 监听模态框的状态
@@ -223,6 +228,9 @@ export default {
     }
   },
   mounted () {
+    // 一打开呈现所有项目
+    this.getData()
+    // 得到选项的选择项
     this.getSelectData()
   },
   methods: {
@@ -240,6 +248,7 @@ export default {
           for (let num = rs.data.mItemBidSun; num > 0; num--) {
             bdArr.push(num)
           }
+          bdArr.push('全部')
           this.list.mItemBids = bdArr
         }
       }, (err) => { console.log(err) })
@@ -250,9 +259,13 @@ export default {
       }
       // 得到所有项目
       this.comFun.post('/User/getUserItem', obj, this).then((rs) => {
-        // console.log(JSON.stringify(rs))
+        console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           this.list.items = rs.data
+          // 加一个全部
+          this.list.items.push({
+            'mItemID': '', 'ItemDes': '全部', 'mItemBidSun': '全部', 'mItemJGUint': ''
+          })
         }
       }, (err) => { console.log(err) })
     },
@@ -323,7 +336,7 @@ export default {
         }
       }, (err) => { console.log(err) })
     },
-    // 查看更多（得到矿料列表，操作矿料）
+    // 级配（得到矿料列表，操作矿料）
     more (index) {
       this.showMoreModel = true
       this.selectmClID = this.itemlist[index].mClID

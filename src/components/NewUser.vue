@@ -73,17 +73,20 @@ export default {
   mounted () {
     // 确定是修改用户还是新增项目
     this.selectItemID = this.$store.state.selectItemID
-    if (this.selectItemID) {
-      // 是修改用户
-      this.type = 1
-      // console.log('是修改' + this.selectItemID)
-      // 得到数据并陈列
-      this.getUserData()
-      // 用户名变为不可修改
-      this.disabled = true
-      // 改变placeholder的字样
-      this.placeholder = '请输入需要修改的密码'
-    }
+    // 暂定此页只负责新增用户,以下判断是否为修改页面的代码注释开始
+    // if (this.selectItemID) {
+    //   // 是修改用户
+    //   this.type = 1
+    //   // console.log('是修改' + this.selectItemID)
+    //   // 得到数据并陈列
+    //   this.getUserData()
+    //   // 用户名变为不可修改
+    //   this.disabled = true
+    //   // 改变placeholder的字样
+    //   this.placeholder = '请输入需要修改的密码'
+    // }
+    // 暂定此页只负责新增用户,以下判断是否为修改页面的代码注释结束
+
     // 得到所有项目列表不分页
     this.getData()
   },

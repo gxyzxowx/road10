@@ -15,7 +15,7 @@
     margin-top: .30rem;
     .chartpie{
       height:2.60rem;
-      width:3.50rem;
+      width:4.2rem;
     }
   }
 }
@@ -89,7 +89,7 @@ export default {
         // console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           // 各个标段总量统计柱状图
-          this.dataBar1 = this.handleBarData(rs.data.BhBidData, 'name', 'value', '拌合站产量按标段统计')
+          this.dataBar1 = this.handleBarData(rs.data.BhBidData, 'name', 'value', '拌合站产量按标段统计（kg）')
           // 各个材料总量统计柱状图
           this.dataBar2 = this.handleBarData(rs.data.BhClTypeData, 'name', 'value', '拌合站产量按材料类型统计', 1)
           // 预警类型饼图
@@ -222,6 +222,9 @@ export default {
             radius: ['24%', '55%'],
             center: ['55%', '70%'],
             data: seriesdata,
+            label: {
+              formatter: '{b}({d}%)'
+            },
             itemStyle: {
               emphasis: {
                 shadowBlur: 10,

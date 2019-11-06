@@ -82,6 +82,7 @@ export default {
         if (rs.code === 0) {
           //   存入cookie
           this.comFun.setCookie('roadmUserID', rs.data.mUserID, 1)
+          this.comFun.setCookie('roadmUserName', rs.data.mUserName, 1)
           this.$router.push('/')
           return false
         } else {

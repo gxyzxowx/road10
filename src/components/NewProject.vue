@@ -1,10 +1,4 @@
 <style scoped>
-.newform {
-  width: 8rem;
-  height:9rem;
-  margin: .50rem auto;
-  overflow-y: scroll;
-}
 
 </style>
 <template>
@@ -62,21 +56,12 @@
         <Button @click="handleReset('formValidate')" style="margin-left: .08rem">重置</Button>
       </FormItem>
     </Form>
-    <Row>
-      <Col class="demo-spin-col" v-if="loading">
-          <Spin fix>
-              <Icon type="ios-loading"  class="demo-spin-icon-load"></Icon>
-              <div>Loading</div>
-          </Spin>
-      </Col>
-    </Row>
   </div>
 </template>
 <script>
 export default {
   data () {
     return {
-      loading: false,
       // 0新增项目；1修改项目
       type: 0,
       selectItemID: '',

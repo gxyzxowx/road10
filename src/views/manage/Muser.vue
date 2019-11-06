@@ -23,7 +23,7 @@
   <div class="mitem">
     <div class="title">
       <div class="left">
-        <Button type="success" size="large" icon="md-add" @click="createNewItem()">新增管理员</Button>
+        <Button type="success" :disabled="btndisabled" size="large" icon="md-add" @click="createNewItem()">新增管理员</Button>
       </div>
       <div class="right">
         <Input
@@ -80,20 +80,30 @@
         <div slot="footer"></div>
     </Modal>
     <!-- 修改管理员模态框 -->
-       <Modal v-model="showModifyModal" width="900" >
+       <!-- <Modal v-model="showModifyModal" width="900" >
         <p slot="header" style="color:#333;text-align:center">
             <Icon type="md-add"></Icon>
             <span>修改用户</span>
         </p>
         <NewUser v-if="showModifyModal"></NewUser>
+    </Modal> -->
+    <Modal v-model="showModifyModal" width="900" >
+        <p slot="header" style="color:#333;text-align:center">
+            <Icon type="md-add"></Icon>
+            <span>修改用户</span>
+        </p>
+        <ModifyUser v-if="showModifyModal"></ModifyUser>
+        <div slot="footer"></div>
     </Modal>
   </div>
 </template>
 <script>
 import NewUser from '@/components/NewUser.vue'
+import ModifyUser from '@/components/ModifyUser.vue'
 export default {
   data () {
     return {
+      btndisabled: false,
       loading: true,
       modal_loading: false,
       page: {
@@ -195,21 +205,17 @@ export default {
       }
       // console.log(JSON.stringify(obj))
       this.comFun.post('/User/getUserList', obj, this).then((rs) => {
-        // console.log(JSON.stringify(rs))
+        console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           this.page.totaldata = rs.total
           rs.data.map((item, index, arr) => {
             arr[index].num = item.userItem.length
-            // let ownitemsIDs = []
-            // for (let i = 0; i < item.userItem.length; i++) {
-            //   ownitemsIDs.push(
-            //     '项目ID: ' + item.userItem[i].mItemID +
-            //     '，项目名:' + item.userItem[i].mItemDes
-            //   )
-            // }
-            // arr[index].itemIDs = JSON.stringify(ownitemsIDs)
+            if (item.mUserLevel === 1) { arr[index].mUserLevel = '普通管理员' }
+            if (item.mUserLevel === 2) { arr[index].mUserLevel = '超级管理员' }
           })
           this.itemlist = rs.data
+        } else {
+          this.btndisabled = true
         }
       }, (err) => { console.log(err) })
     },
@@ -265,7 +271,9 @@ export default {
   },
   components: {
     // eslint-disable-next-line vue/no-unused-components
-    NewUser
+    NewUser,
+    // eslint-disable-next-line vue/no-unused-components
+    ModifyUser
   }
 }
 </script>

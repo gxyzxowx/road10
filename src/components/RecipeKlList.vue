@@ -6,9 +6,13 @@
     justify-content: space-between;
     .right {
       display: flex;
-    }
-    .right {
       margin: .10rem 0;
+    }
+    .mid {
+      font-size: .16rem;
+      span{
+        padding-right: .25rem;
+      }
     }
   }
 }
@@ -17,7 +21,11 @@
 <!-- 某个材料的矿料列表 -->
   <div class="mitem">
     <div class="title">
-
+      <div class="mid">
+        <span>材料名：{{titletxt.name}}</span>
+        <span>材料类型：{{titletxt.type}}</span>
+        <span>所属项目：{{titletxt.item}}</span>
+      </div>
       <div class="right">
         <Button type="success" size="large" icon="md-add" @click="createNewItem()">新建矿料</Button>
       </div>
@@ -60,6 +68,7 @@
             <span>修改矿料</span>
         </p>
         <NewKl v-if="showModifyModal"></NewKl>
+        <div slot="footer"></div>
     </Modal>
   </div>
 </template>
@@ -102,7 +111,7 @@ export default {
         }, {
           'title': '项目标段',
           'key': 'mItemBid',
-          'width': 80
+          'width': 95
         }, {
           'title': '项目描述',
           'key': 'mItemDes',
@@ -111,67 +120,67 @@ export default {
         {
           'title': '矿料用量比',
           'key': 'mKlYLB',
-          'width': 100
+          'width': 110
         },
         {
-          'title': '孔径37.5通过率',
+          'title': '37.5筛孔率',
           'key': 'mJP375',
           'width': 110
         },
         {
-          'title': '孔径31.5通过率',
+          'title': '31.5筛孔率',
           'key': 'mJP315',
           'width': 110
         },
         {
-          'title': '孔径26.5通过率',
+          'title': '26.5筛孔率',
           'key': 'mJP265',
           'width': 110
         },
         {
-          'title': '孔径19.0通过率',
+          'title': '19.0筛孔率',
           'key': 'mJP190',
           'width': 110
         },
         {
-          'title': '孔径0.95通过率',
+          'title': '0.95筛孔率',
           'key': 'mJP095',
           'width': 110
         },
         {
-          'title': '孔径0.475通过率',
+          'title': '0.475筛孔率',
           'key': 'mJP0475',
-          'width': 110
+          'width': 115
         },
         {
-          'title': '孔径0.263通过率',
+          'title': '0.263筛孔率',
           'key': 'mJP0236',
-          'width': 110
+          'width': 115
         },
         {
-          'title': '孔径0.118通过率',
+          'title': '0.118筛孔率',
           'key': 'mJP0118',
-          'width': 110
+          'width': 115
         },
         {
-          'title': '孔径0.06通过率',
+          'title': '0.06筛孔率',
           'key': 'mJP006',
-          'width': 110
+          'width': 115
         },
         {
-          'title': '孔径0.03通过率',
+          'title': '0.03筛孔率',
           'key': 'mJP003',
           'width': 110
         },
         {
-          'title': '孔径0.015通过率',
+          'title': '0.015筛孔率',
           'key': 'mJP0015',
-          'width': 110
+          'width': 115
         },
         {
-          'title': '孔径0.0075通过率',
+          'title': '0.0075筛孔率',
           'key': 'mJP00075',
-          'width': 110
+          'width': 125
         },
         {
           'title': '操作',
@@ -204,7 +213,12 @@ export default {
         //   'tBhKlTable': '1#(24-32',
         //   'mItemDes': 'AAA'
         // }
-      ]
+      ],
+      titletxt: {
+        name: '',
+        type: '',
+        item: ''
+      }
     }
   },
   watch: {
@@ -239,10 +253,30 @@ export default {
   },
   mounted () {
     this.mClID = this.$store.state.selectItemID
+    // 得到该材料的信息
+    this.getBhClInfo()
+    // 得到材料的级配信息
     this.getData()
   },
   methods: {
-    // 查看list
+    // 得到材料信息
+    getBhClInfo () {
+      let obj = {
+        mUserID: this.comFun.getCookie('roadmUserID'),
+        mClID: this.mClID
+      }
+      console.log(JSON.stringify(obj))
+
+      this.comFun.post('/Cl/getBhClInfo', obj, this).then((rs) => {
+        console.log(JSON.stringify(rs))
+        if (rs.code === 0) {
+          this.titletxt.name = rs.data.mClName
+          this.titletxt.type = rs.data.mClTypeName
+          this.titletxt.item = rs.data.mItemName
+        }
+      }, (err) => { console.log(err) })
+    },
+    // 查看级配list
     getData () {
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),

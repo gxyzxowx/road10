@@ -29,7 +29,7 @@
 <div class="title">预警列表</div>
 <Table :loading="loading" height="500" border :columns="listTitle" :data="datalist"></Table>
 <Switch v-model="loading"></Switch>
-<div style="margin: 10px;overflow: hidden">
+<div style="margin: .1rem;overflow: hidden">
         <div style="float: right;">
             <Page :total="page.totaldata" :current.sync="page.current" :page-size="page.rows" @on-change="changePage"></Page>
         </div>
@@ -75,7 +75,7 @@ export default {
         },
         {
           title: '设备类型',
-          key: 'mDevSn',
+          key: 'mDevType',
           width: 130
         },
         {

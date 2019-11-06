@@ -1,10 +1,5 @@
 <style scoped>
-.newform {
-  width: 8rem;
-  height:9rem;
-  margin: .50rem auto;
-  overflow-y: scroll;
-}
+
 .newform .select{
   width:1.50rem;
   margin-right:.10rem;
@@ -13,7 +8,7 @@
 <template>
   <div class="newform">
     <h2 style="margin-bottom: .10rem;">{{type? '修改' : '新建'}}设备</h2>
-    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160">
+    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="240">
       <FormItem label="选择项目" >
         <Select v-model="formValidate.mItemID" class="select" size="large" placeholder="请选择项目">
           <Option v-for="item in selectlist.items" :value="item.mItemID" :key="item.mItemID">{{ item.ItemDes }}</Option>
@@ -38,36 +33,36 @@
       <FormItem label="设备电话卡号">
         <Input v-model.number="formValidate.mDevPhoneNo" placeholder="请输入设备电话卡号"></Input>
       </FormItem>
-      <FormItem label="温度预警标准(℃)" prop="mTempStandard">
+      <FormItem label="温度预警标准( ℃ )" prop="mTempStandard">
         <Input v-model="formValidate.mTempStandard" placeholder="请输入..."></Input>
       </FormItem>
-      <FormItem label="温度一级预警阈值(℃)" prop="mTempAL1Max">
+      <FormItem label="温度一级预警阈值( ℃ )" prop="mTempAL1Max">
         <Input v-model.number="formValidate.mTempAL1Max" placeholder="请输入..."></Input>
       </FormItem>
-      <FormItem label="温度二级预警阈值(℃)" prop="mTempAL2Max">
+      <FormItem label="温度二级预警阈值( ℃ )" prop="mTempAL2Max">
         <Input v-model="formValidate.mTempAL2Max" placeholder="请输入..."></Input>
       </FormItem>
-      <FormItem label="温度三级预警阈值(℃)" prop="mTempAL3Max">
+      <FormItem label="温度三级预警阈值( ℃ )" prop="mTempAL3Max">
         <Input v-model="formValidate.mTempAL3Max" placeholder="请输入..."></Input>
       </FormItem>
       <!-- 速度预警，只有摊铺机和碾压机要填 -->
       <div v-if="!ifshow209">
-        <FormItem label="速度预警标准" prop="mSpeedStandard">
+        <FormItem label="速度预警标准（m/h）" prop="mSpeedStandard">
           <Input v-model="formValidate.mSpeedStandard" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="速度一级预警阈值" prop="mSpeedAL1Max">
+        <FormItem label="速度一级预警阈值（m/h）" prop="mSpeedAL1Max">
           <Input v-model.number="formValidate.mSpeedAL1Max" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="速度二级预警阈值" prop="mSpeedAL2Max">
+        <FormItem label="速度二级预警阈值（m/h）" prop="mSpeedAL2Max">
           <Input v-model="formValidate.mSpeedAL2Max" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="速度三级预警阈值" prop="mSpeedAL3Max">
+        <FormItem label="速度三级预警阈值（m/h）" prop="mSpeedAL3Max">
           <Input v-model="formValidate.mSpeedAL3Max" placeholder="请输入..."></Input>
         </FormItem>
       </div>
       <!-- 拌合站才有的石油比209 -->
       <div v-if="ifshow209">
-        <FormItem v-for="(item, index) in newdev1" :key="index" :label="item.title" :prop="item.key">
+        <FormItem v-for="(item, index) in newdev1" :key="index" :label="item.title + '（ % ）'" :prop="item.key">
           <Input v-model="formValidate[item.key]" :placeholder="'请输入'+ item.title"></Input>
         </FormItem>
       </div>
@@ -77,14 +72,6 @@
         <Button @click="handleReset('formValidate')" style="margin-left: .08rem">重置</Button>
       </FormItem>
     </Form>
-    <Row>
-      <Col class="demo-spin-col" v-if="loading">
-          <Spin fix>
-              <Icon type="ios-loading"  class="demo-spin-icon-load"></Icon>
-              <div>Loading</div>
-          </Spin>
-      </Col>
-    </Row>
   </div>
 </template>
 <script>
@@ -92,7 +79,6 @@ import newdev1 from '@/data/newdev1.json'
 export default {
   data () {
     return {
-      loading: false,
       // 0新增设备；1修改设备
       type: 0,
       newdev1: newdev1,

@@ -81,9 +81,10 @@ export default {
         let arr = str.split('')
         arr.splice(2, 0, '.')
         let reslut = arr.join('')
+        let datay = Number(data[item] * 100)
         reslut = Number(reslut)
         xAxisdata.push(reslut)
-        seriesdata.push(data[item])
+        seriesdata.push(datay)
       }
       let option = {
         title: {

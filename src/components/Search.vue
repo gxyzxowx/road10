@@ -2,6 +2,7 @@
   .title .selects{
     .box {
       width: 2rem;
+      // height: 1rem;
     }
   }
 </style>

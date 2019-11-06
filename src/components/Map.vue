@@ -103,7 +103,7 @@ export default {
   watch: {
     data: {
       handler(newVal, oldVal) {
-        // console.log(newVal);
+        // console.log(JSON.stringify(newVal));
 
         // 测试时可以去掉开始
         newVal.map((item, index, array) => {

@@ -95,10 +95,10 @@
             <!-- 名称 -->
             <div class="name">项目名称：<span> {{itemName}}</span></div>
             <div class="name">项目状态：<span> {{datas.ItemData.mItemActive===1 ? '进行中' : '已完结'}}</span></div>
-            <div class="name">监管单位：<span> {{datas.ItemData.mItemJGUint}}</span></div>
-            <div class="name">施工单位：<span> {{datas.ItemData.mItemSGUint}}</span></div>
+            <div class="name">建设单位：<span> {{datas.ItemData.mItemSGUint}}</span></div>
+            <div class="name">咨询单位：<span> {{datas.ItemData.mItemJGUint}}</span></div>
             <div class="name">最大标段数：<span> {{datas.ItemData.mItemBidSun}}</span></div>
-            <div class="name">总的里程数：<span> {{datas.ItemData.mItemTotalLength}}</span></div>
+            <div class="name">总的里程数（km）：<span> {{datas.ItemData.mItemTotalLength}}</span></div>
 
           </div>
         </div>
@@ -141,7 +141,7 @@
           <div class="L"></div>
         </div>
         <div class="content">
-          <div class="title">拌合站产量统计</div>
+          <div class="title">拌合站产量统计（kg）</div>
           <BarChart :id="'bar1'" :data="dataBar1" class = "chart"></BarChart>
         </div>
       </div>
@@ -153,7 +153,7 @@
           <div class="L"></div>
         </div>
         <div class="content">
-          <div class="title">每日生产总量统计</div>
+          <div class="title">每日生产总量统计（kg）</div>
           <CurveChart :id="'curve1'" :data="dataCurve1" class = "chart"></CurveChart>
         </div>
       </div>
@@ -165,7 +165,7 @@
           <div class="L"></div>
         </div>
         <div class="content">
-          <div class="title">摊铺和碾压里程统计</div>
+          <div class="title">摊铺和碾压里程统计（km）</div>
           <CurveChart :id="'bar2'" :data="dataBar2" class = "chart"></CurveChart>
         </div>
       </div>
@@ -196,7 +196,8 @@ export default {
       dataPie2: null,
       dataBar1: null,
       dataCurve1: null,
-      dataBar2: null
+      dataBar2: null,
+      timer: null
     }
   },
   mounted () {
@@ -205,6 +206,13 @@ export default {
       this.displayItem()
       this.ifdisplayItem = true
     }
+    this.timer = setInterval(() => {
+      console.log('请求了')
+      this.displayItem()
+    }, 30000)
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
   },
   computed: {
     itemInfo () {
@@ -233,7 +241,7 @@ export default {
       // console.log(obj)
       this.comFun.post('/Index/getHomePageData', obj, this).then(
         rs => {
-        // console.log(rs)
+          // console.log(JSON.stringify(rs.data.DevData))
           if (rs.code === 0) {
           //  项目信息
             this.datas.ItemData = rs.data.ItemData
@@ -288,6 +296,9 @@ export default {
           {
             name: title,
             type: 'pie',
+            label: {
+              formatter: '{b}: {@2012} ({d}%)'
+            },
             radius: ['24%', '55%'],
             center: ['55%', '50%'],
             data: seriesdata,
@@ -346,7 +357,7 @@ export default {
         ],
         series: [
           {
-            name: '.',
+            name: '',
             type: 'bar',
             itemStyle: {
               normal: {

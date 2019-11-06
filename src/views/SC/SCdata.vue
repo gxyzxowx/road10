@@ -92,7 +92,7 @@ export default {
         },
         {
           title: '合格',
-          key: 'key1'
+          key: 'mBhScAlarm'
         },
         {
           title: '温度预警',
@@ -104,7 +104,7 @@ export default {
         },
         {
           title: '级配预警',
-          key: 'key2'
+          key: 'SKLAlarm'
         }
       ],
       datalist: []
@@ -130,7 +130,7 @@ export default {
       obj = { ...obj, ...this.emitobj }
       console.log(JSON.stringify(obj))
       this.comFun.post('/Produce_J_G/productData', obj, this).then((rs) => {
-        // console.log(JSON.stringify(rs))
+        console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           // 总页数
           this.page.totaldata = rs.data.total
@@ -140,15 +140,17 @@ export default {
           rs.data.data_list.map((item, index, arr) => {
             arr[index].mBhItemTemp = item.mBhItemTemp + '℃'
             // 预警：0:无预警 1:产生预警
+            arr[index].mBhScAlarm = item.mBhScAlarm ? '是' : '否'
             arr[index].mBhItemTempAlarm = item.mBhItemTempAlarm ? '是' : '否'
             arr[index].mBhYSBAlarm = item.mBhYSBAlarm ? '是' : '否'
+            arr[index].SKLAlarm = item.SKLAlarm ? '是' : '否'
             arr[index].mBnYSB = item.mBnYSB + '%'
           })
           this.datalist = rs.data.data_list
           // 各个标段总量统计柱状图
-          this.dataBar1 = this.handleBarData(rs.data.BhBidData, 'name', 'value', '拌合站产量按标段统计')
+          this.dataBar1 = this.handleBarData(rs.data.BhBidData, 'name', 'value', '拌合站产量按标段统计（kg）')
           // 各个材料总量统计柱状图
-          this.dataBar2 = this.handleBarData(rs.data.BhClTypeData, 'name', 'value', '拌合站产量按材料类型统计', 1)
+          this.dataBar2 = this.handleBarData(rs.data.BhClTypeData, 'name', 'value', '拌合站产量按材料类型统计（kg）', 1)
         }
       }, (err) => { console.log(err) })
     },
