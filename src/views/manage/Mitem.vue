@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="bottom">
-      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" v-if="showTable" :width="width">
+      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" :width="width">
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" style="margin-right: .05rem" @click="importExcel(index)">导入</Button>
         <Button type="primary" size="small" style="margin-right: .05rem" @click="modify(index)">修改</Button>
@@ -113,53 +113,52 @@ export default {
       showExcelModel: false,
       showNewProject: false,
       showModifyProject: false,
-      showTable: true,
       itemTitle: [
         {
           title: '项目描述',
           key: 'mItemDes',
-          width: 150,
+          width: 180,
           fixed: 'left'
         },
-        {
-          title: '项目ID',
-          key: 'mItemID',
-          width: 80
-        },
+        // {
+        //   title: '项目ID',
+        //   key: 'mItemID',
+        //   width: 80
+        // },
         {
           title: '标段数量',
           key: 'mItemBidSun',
-          width: 80
+          width: 100
         },
         {
           title: '项目总长度',
           key: 'mItemTotalLength',
-          width: 100
+          width: 110
         },
         {
           title: '项目状态',
           key: 'mItemActive',
-          width: 80
+          width: 100
         },
         {
           title: '项目负责人',
           key: 'mItemAdmin',
-          width: 100
+          width: 110
         },
         {
           title: '项目联系电话',
           key: 'mItemPhoneNo',
+          width: 130
+        },
+        {
+          title: '建设单位',
+          key: 'mItemSGUint',
           width: 150
         },
         {
-          title: '施工单位',
-          key: 'mItemSGUint',
-          width: 100
-        },
-        {
-          title: '监管单位',
+          title: '咨询单位',
           key: 'mItemJGUint',
-          width: 100
+          width: 150
         },
         {
           title: '一级预警联系人',
@@ -241,11 +240,6 @@ export default {
         this.showModifyProject = false
         // 重新刷新数据
         this.getData()
-        // 重新展示数据
-        this.showTable = false
-        this.$nextTick(() => {
-          this.showTable = true
-        })
         // 模态框状态归零
         this.$store.commit('setModalState', '')
       }
@@ -275,9 +269,12 @@ export default {
         keywords: this.inputItem
       }
       this.comFun.post('/User/getItemList', obj, this).then((rs) => {
-        // console.log(JSON.stringify(rs))
+        console.log(JSON.stringify(rs))
         if (rs.code === 0) {
           this.page.totaldata = rs.total
+          rs.data.map((item, index, arr) => {
+            rs.data[index]['mItemActive'] = item['mItemActive'] ? '进行中' : '完结'
+          })
           this.itemlist = rs.data
         }
       }, (err) => { console.log(err) })

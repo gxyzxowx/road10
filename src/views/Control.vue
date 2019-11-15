@@ -241,7 +241,7 @@ export default {
       // console.log(obj)
       this.comFun.post('/Index/getHomePageData', obj, this).then(
         rs => {
-          // console.log(JSON.stringify(rs.data.DevData))
+          // console.log(JSON.stringify(rs.data.DevData, null, 2))
           if (rs.code === 0) {
           //  项目信息
             this.datas.ItemData = rs.data.ItemData
@@ -342,18 +342,19 @@ export default {
         },
         xAxis: [
           {
+            type: 'value',
+            splitLine: { show: true, lineStyle: { color: ['#333'] } } // 网格线
+          }
+        ],
+        yAxis: [
+          {
             type: 'category',
             data: xAxisdata,
             axisTick: {
               alignWithLabel: true
             }
           }
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            splitLine: { show: true, lineStyle: { color: ['#333'] } } // 网格线
-          }
+
         ],
         series: [
           {

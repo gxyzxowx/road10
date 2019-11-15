@@ -36,7 +36,7 @@
       </div>
     </div>
     <div class="bottom">
-      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" v-if="showTable">
+      <Table border :columns="itemTitle" :data="itemlist" :loading="loading">
       <template slot-scope="{ row, index }" slot="itemcols">
         <div v-for="(item, index0) in row.userItem" style="display:flex;">
 
@@ -123,7 +123,6 @@ export default {
       delectItemDes: '',
       showNewModal: false,
       showModifyModal: false,
-      showTable: true,
       itemTitle: [
         {
           title: '用户ID',
@@ -159,10 +158,12 @@ export default {
     }
   },
   watch: {
-    // 监听到关闭模态框时
+    // 监听到关闭修改用户模态框时,清除vuex，刷新页面
     showModifyModal: function (newVal, oldVal) {
       if (!newVal) {
         this.clearStoreselectItemID()
+        // 重新刷新数据
+        this.getData()
       }
     },
     // 监听模态框的状态
@@ -173,11 +174,6 @@ export default {
         this.showModifyModal = false
         // 重新刷新数据
         this.getData()
-        // 重新展示数据
-        this.showTable = false
-        this.$nextTick(() => {
-          this.showTable = true
-        })
         // 模态框状态归零
         this.$store.commit('setModalState', '')
       }

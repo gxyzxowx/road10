@@ -4,14 +4,14 @@
 <template>
   <div class="newform">
     <h2 style="margin-bottom: .10rem;">{{type? '修改' : '新建'}}项目</h2>
-    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
+    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="150">
       <FormItem label="项目描述" prop="mItemDes">
         <Input v-model="formValidate.mItemDes" placeholder="请输入您项目的名称"></Input>
       </FormItem>
       <FormItem label="最大标段数" prop="mItemBidSun">
         <Input v-model.number="formValidate.mItemBidSun" placeholder="请输入您项目的最大标段数"></Input>
       </FormItem>
-      <FormItem label="项目总长度" prop="mItemTotalLength">
+      <FormItem label="预计项目总长度" prop="mItemTotalLength">
         <Input v-model.number="formValidate.mItemTotalLength" placeholder="请输入项目总长度"></Input>
       </FormItem>
       <FormItem label="项目状态" prop="mItemActive">

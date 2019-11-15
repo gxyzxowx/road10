@@ -235,11 +235,6 @@ export default {
         this.showModifyModal = false
         // 重新刷新数据
         this.getData()
-        // 重新展示数据
-        this.showTable = false
-        this.$nextTick(() => {
-          this.showTable = true
-        })
         // 模态框状态归零
         this.$store.commit('setModalStateKl', '')
       }

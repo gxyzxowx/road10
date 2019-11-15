@@ -28,7 +28,7 @@
           <Modal v-model="delectmodal" width="360">
             <p slot="header" style="color:#f60;text-align:center">
               <Icon type="ios-information-circle"></Icon>
-              <span>为该管理员移除项目ID:{{delectItemDes}}</span>
+              <span>为该管理员移除项目:{{delectItemDes}}</span>
             </p>
             <div style="text-align:center">
               <p>移除后不可恢复</p>
@@ -49,18 +49,20 @@
           <Input type="password" v-model.number="formDynamic.mUserPwd" placeholder="请输入新设置的密码"></Input>
         </FormItem>
          <FormItem>
-          <Button type="primary" @click="handleSubmit('formDynamic')">提交新密码</Button>
+          <Button type="primary" @click="changePassword('formDynamic')">提交新密码</Button>
       </FormItem>
       </Form>
     </div>
 
     <!-- 新增项目模态框 -->
-    <Modal v-model="showNewModal" width="900">
+    <Modal v-model="showNewModal" width="500" @on-ok="newItem">
       <p slot="header" style="color:#333;text-align:center">
         <Icon type="md-add"></Icon>
-        <span>新增项目</span>
+        <span>为管理员{{formDynamic.mUserName}}新增项目</span>
       </p>
-      <div slot="footer"></div>
+      <Select v-model="selectAddItem" size="large" style="width:250px">
+        <Option v-for="item in selectAddItemList" :value="item.mItemID" :key="item.mItemID">{{ item.mItemDes }}</Option>
+    </Select>
     </Modal>
   </div>
 </template>
@@ -69,6 +71,10 @@ export default {
   data () {
     return {
       modal_loading: false,
+      // 选择要增加的项目
+      selectAddItem: '',
+      // 选择要增加的项目列表
+      selectAddItemList: '',
       formDynamic: {},
       // 选择的某个管理员ID
       selectItemID: '',
@@ -105,12 +111,7 @@ export default {
         }
       ],
       // 列表数据
-      itemlist: [],
-      titletxt: {
-        name: '',
-        type: '',
-        item: ''
-      }
+      itemlist: []
     }
   },
   watch: {
@@ -118,37 +119,38 @@ export default {
       if (!newVal) {
         this.clearStoreSelectItemID()
       }
-    },
-    // 监听模态框的状态
-    storeModalState: function (newVal) {
-      console.log('监听到关闭modal')
-      if (newVal === false) {
-        this.showNewModal = false
-        this.showModifyModal = false
-        // 重新刷新数据
-        this.getData()
-        // 重新展示数据
-        this.showTable = false
-        this.$nextTick(() => {
-          this.showTable = true
-        })
-        // 模态框状态归零
-        this.$store.commit('setModalStateKl', '')
-      }
     }
   },
   computed: {
-    // 监听模态框的状态
-    storeModalState: function () {
-      return this.$store.state.modalStateKl
-    }
   },
   mounted () {
     this.selectItemID = this.$store.state.selectItemID
-
     this.getData()
   },
   methods: {
+    // 修改密码
+    changePassword () {
+      if (!this.formDynamic.mUserPwd) {
+        this.$Message.info('您并没有输入新密码')
+        return
+      }
+      let obj = {
+        mUserID: this.comFun.getCookie('roadmUserID'),
+        editUserID: this.selectItemID,
+        mUserPwd: this.formDynamic.mUserPwd
+      }
+      console.log(JSON.stringify(obj))
+      this.comFun.post('/User/editAdminInfo', obj, this).then((rs) => {
+        console.log(JSON.stringify(rs))
+        if (rs.code === 0) {
+          // 成功,提示
+          console.log('修改密码成功')
+          this.$Message.success('修改密码成功')
+        } else {
+          this.$Message.error(rs.message)
+        }
+      }, (err) => { console.log(err) })
+    },
     // 得到用户的数据
     getData () {
       let obj = {
@@ -177,13 +179,50 @@ export default {
         }
       )
     },
-    // 新建设备
+    // 弹出模态框newItem
     createNewItem () {
       this.showNewModal = true
+      // 获取selectAddItemList
+      let obj = {
+        mUserID: this.comFun.getCookie('roadmUserID'),
+        // 被操作人的id
+        editUserID: this.selectItemID
+      }
+      console.log(JSON.stringify(obj))
+      this.comFun.post('/Item/getUserOtherItem', obj, this).then(
+        rs => {
+          console.log(JSON.stringify(rs))
+          if (rs.code === 0) {
+            this.selectAddItemList = rs.data
+          }
+        },
+        err => { console.log(err) })
+    },
+    newItem () {
+      let obj = {
+        mUserID: this.comFun.getCookie('roadmUserID'),
+        // 增加项目的id
+        itemID: this.selectAddItem,
+        // 被操作人的id
+        editUserID: this.selectItemID
+      }
+      console.log(JSON.stringify(obj))
+      this.comFun.post('/User/adminAddUserItem', obj, this).then(
+        rs => {
+          console.log(JSON.stringify(rs))
+          if (rs.code === 0) {
+            this.$Message.success('成功增加项目')
+            this.showNewModal = false
+            this.getData()
+          } else {
+            this.$Message.error(rs.message)
+          }
+        },
+        err => { console.log(err) })
     },
     // 准备删除
     remove (index) {
-      this.delectItemDes = this.itemlist[index].tBhKlTable
+      this.delectItemDes = this.itemlist[index].mItemDes
       this.delectmodal = true
       this.selectIndex = index
     },
@@ -191,13 +230,13 @@ export default {
     delItem () {
       let obj = {
         mUserID: this.comFun.getCookie('roadmUserID'),
-        mItemID: this.itemlist[this.selectIndex].mItemID,
-        mItemBid: this.itemlist[this.selectIndex].mItemBid,
-        mClID: this.itemlist[this.selectIndex].mClID,
-        mKlID: this.itemlist[this.selectIndex].mKlID
+        // 移除项目的id
+        itemID: this.itemlist[this.selectIndex].mItemID,
+        // 被操作人的id
+        editUserID: this.selectItemID
       }
       console.log(JSON.stringify(obj))
-      this.comFun.post('/Cl/delRepice', obj, this).then(
+      this.comFun.post('/User/adminDeleteUserItem', obj, this).then(
         rs => {
           console.log(JSON.stringify(rs))
           if (rs.code === 0) {
@@ -222,6 +261,7 @@ export default {
       this.$store.commit('setKlUse', {})
     }
   },
-  components: {}
+  components: {
+  }
 }
 </script>

@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="bottom">
-      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" no-data-text="暂无数据，请切换查看条件查看数据" v-if="showTable">
+      <Table border :columns="itemTitle" :data="itemlist" :loading="loading" no-data-text="暂无数据，请切换查看条件查看数据">
       <template slot-scope="{ row, index }" slot="action">
         <Button type="primary" size="small" style="margin-right: .05rem" @click="more(index)">级配</Button>
         <Button type="primary" size="small" style="margin-right: .05rem" @click="modify(index)">修改</Button>
@@ -131,7 +131,6 @@ export default {
       showNewModal: false,
       showModifyModal: false,
       showMoreModel: false,
-      showTable: true,
       itemTitle: [
         {
           title: '材料ID',
@@ -208,11 +207,6 @@ export default {
         this.showModifyModal = false
         // 重新刷新数据
         this.getData()
-        // 重新展示数据
-        this.showTable = false
-        this.$nextTick(() => {
-          this.showTable = true
-        })
         // 模态框状态归零
         this.$store.commit('setModalState', '')
       }

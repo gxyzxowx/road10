@@ -7,7 +7,7 @@
   }
   .top .chart{
     height:2.50rem;
-    width:3rem;
+    width:5rem;
   }
 </style>
 <template>
@@ -185,6 +185,9 @@ export default {
           {
             name: title,
             type: 'pie',
+            label: {
+              formatter: '{b}: {@2012} ({d}%)'
+            },
             radius: ['24%', '55%'],
             center: ['55%', '60%'],
             data: seriesdata,
